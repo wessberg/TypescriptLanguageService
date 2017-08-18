@@ -56,7 +56,7 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 				this.files.set(normalizedPath, {version: actualVersion, content: actualContent});
 
 				// Recursively add all missing imports to the LanguageService if 'addImportedFiles' is truthy.
-				if (addImportedFiles) this.getImportedFilesForFile(resolvedPath).forEach(importedFile => this.addFile({path: importedFile, from: resolvedPath, addImportedFiles}));
+				if (addImportedFiles != null && addImportedFiles) this.getImportedFilesForFile(resolvedPath).forEach(importedFile => this.addFile({path: importedFile, from: resolvedPath, addImportedFiles}));
 			}
 
 			// Retrieve the Statements of the file
