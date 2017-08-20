@@ -1,4 +1,4 @@
-import {DefinitionInfo, Expression, ImplementationLocation, LanguageServiceHost, Node, ReferencedSymbol, Statement} from "typescript";
+import {DefinitionInfo, Expression, ImplementationLocation, LanguageServiceHost, Node, ReferencedSymbol, Statement, NodeArray} from "typescript";
 import {ITypescriptLanguageServiceAddFileOptions} from "./i-typescript-language-service-add-file-options";
 import {ITypescriptLanguageServiceGetFileOptions} from "./i-typescript-language-service-get-file-options";
 import {IModuleUtil} from "@wessberg/moduleutil";
@@ -6,8 +6,8 @@ import {IPathUtil} from "@wessberg/pathutil";
 import {IFileLoader} from "@wessberg/fileloader";
 
 export interface ITypescriptLanguageService extends LanguageServiceHost {
-	addFile (options: ITypescriptLanguageServiceAddFileOptions): Statement[];
-	getFile (options: ITypescriptLanguageServiceGetFileOptions): Statement[];
+	addFile (options: ITypescriptLanguageServiceAddFileOptions): NodeArray<Statement>;
+	getFile (options: ITypescriptLanguageServiceGetFileOptions): NodeArray<Statement>;
 	removeFile (fileName: string): void;
 	getFileVersion (filePath: string): number;
 	getFileContent (fileName: string, isTemporary?: boolean): string;

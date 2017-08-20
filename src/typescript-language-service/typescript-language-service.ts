@@ -1,4 +1,4 @@
-import {CompilerOptions, createDocumentRegistry, createLanguageService, DefinitionInfo, Expression, getDefaultLibFilePath, ImplementationLocation, IScriptSnapshot, LanguageService, ModuleKind, Node, preProcessFile, ReferencedSymbol, ScriptSnapshot, ScriptTarget, Statement} from "typescript";
+import {CompilerOptions, createDocumentRegistry, createLanguageService, createNodeArray, DefinitionInfo, Expression, getDefaultLibFilePath, ImplementationLocation, IScriptSnapshot, LanguageService, ModuleKind, Node, preProcessFile, ReferencedSymbol, ScriptSnapshot, ScriptTarget, Statement, NodeArray} from "typescript";
 import {ITypescriptLanguageService} from "./i-typescript-language-service";
 import {IModuleUtil} from "@wessberg/moduleutil";
 import {IFileLoader} from "@wessberg/fileloader";
@@ -36,9 +36,9 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	 * @param {string} [content]
 	 * @param {number} [version]
 	 * @param {boolean} [addImportedFiles]
-	 * @returns {Statement[]}
+	 * @returns {NodeArray<Statement>}
 	 */
-	public addFile ({path, from = process.cwd(), content, addImportedFiles}: ITypescriptLanguageServiceAddFileOptions): Statement[] {
+	public addFile ({path, from = process.cwd(), content, addImportedFiles}: ITypescriptLanguageServiceAddFileOptions): NodeArray<Statement> {
 		try {
 			// Resolve the absolute, fully qualified path
 			const resolvedPath = this.moduleUtil.resolvePath(path, from);
@@ -63,7 +63,7 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 			return this.getFile({path: resolvedPath, from});
 		} catch (ex) {
 			// A module attempted to load a file or a module which doesn't exist. Return an empty array.
-			return [];
+			return createNodeArray();
 		}
 	}
 
@@ -71,13 +71,13 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	 * Gets the Statements associated with the given filename.
 	 * @param {string} path
 	 * @param {string} [from]
-	 * @returns {Statement[]}
+	 * @returns {NodeArray<Statement>}
 	 */
-	public getFile ({path, from = process.cwd()}: ITypescriptLanguageServiceGetFileOptions): Statement[] {
+	public getFile ({path, from = process.cwd()}: ITypescriptLanguageServiceGetFileOptions): NodeArray<Statement> {
 		// Resolve the absolute, fully qualified path
 		const file = this.languageService.getProgram().getSourceFile(this.resolveAndNormalize(path, from));
-		if (file == null) return [];
-		return file == null ? [] : file.statements;
+		if (file == null) return createNodeArray();
+		return file == null ? createNodeArray() : file.statements;
 	}
 
 	/**
