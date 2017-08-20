@@ -1,3 +1,9 @@
+/**
+ * Foo
+ */
 class Foo {
-	foo: string;
+	/**
+	 * Bar
+	 */
+	public foo: string;
 }
