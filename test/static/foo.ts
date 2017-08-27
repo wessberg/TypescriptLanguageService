@@ -1,3 +1,4 @@
+/*tslint:disable*/
 /**
  * Foo
  */
@@ -7,3 +8,6 @@ class Foo {
 	 */
 	public foo: string;
 }
+console.log(Foo.toString().slice(0,0));
+export {FileLoader} from "@wessberg/fileloader";
+/*tslint:enable*/

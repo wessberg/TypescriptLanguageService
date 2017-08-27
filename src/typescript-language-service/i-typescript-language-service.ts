@@ -11,8 +11,8 @@ export interface ITypescriptLanguageService extends LanguageServiceHost {
 	removeFile (fileName: string): void;
 	getFileVersion (filePath: string): number;
 	getFileContent (fileName: string, isTemporary?: boolean): string;
-	getDefinitionAtPosition (filename: string, position: number): void;
-	getDefinitionAtStatement (statement: Statement|Node|Expression): void;
+	getDefinitionAtPosition (filename: string, position: number): DefinitionInfo[];
+	getDefinitionAtStatement (statement: Statement|Node|Expression): DefinitionInfo[];
 	getTypeDefinitionAtPosition (filename: string, position: number): DefinitionInfo[];
 	getTypeDefinitionAtStatement (statement: Statement|Expression|Node): DefinitionInfo[];
 	findReferencesForPosition (filename: string, position: number): ReferencedSymbol[];
