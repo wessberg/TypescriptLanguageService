@@ -316,10 +316,10 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	 */
 	public getImportedFilesForContent (content: string, from: string): string[] {
 		return preProcessFile(content, true, true).importedFiles
-		// Take file names
+		// Take file names.
 			.map(importedFile => this.resolvePath(importedFile.fileName, from))
-			// Remove all native built-in modules.
-			.filter(path => !this.moduleUtil.builtInModules.has(path));
+			// Remove all native built-in modules and non-existing files.
+			.filter(path => path != null && path.length > 0 && !this.moduleUtil.builtInModules.has(path));
 	}
 
 	/**
@@ -343,13 +343,18 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	}
 
 	/**
-	 * Resolves the path to a module
+	 * Resolves the path to a module. It may return an empty string if the path doesn't exist
 	 * @param {string} filePath
 	 * @param {string} [from]
 	 * @returns {string}
 	 */
 	private resolvePath (filePath: string, from?: string): string {
-		return filePath.endsWith(".ts") || filePath.endsWith(".tsx") ? filePath : this.moduleUtil.resolvePath(filePath, from);
+		if (filePath.endsWith(".ts") || filePath.endsWith(".tsx")) return filePath;
+		try {
+			return this.moduleUtil.resolvePath(filePath, from);
+		} catch (ex) {
+			return "";
+		}
 	}
 
 	/**
