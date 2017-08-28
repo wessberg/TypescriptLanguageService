@@ -1,3 +1,12 @@
+<a name="0.0.7"></a>
+## 0.0.7 (2017-08-28)
+
+* 0.0.7 ([a5b5a1e](https://github.com/wessberg/TypescriptLanguageService/commit/a5b5a1e))
+* Added the possibility of excluding files ([3c25249](https://github.com/wessberg/TypescriptLanguageService/commit/3c25249))
+* Bumped version ([1b05b33](https://github.com/wessberg/TypescriptLanguageService/commit/1b05b33))
+
+
+
 <a name="0.0.6"></a>
 ## 0.0.6 (2017-08-28)
 
