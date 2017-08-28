@@ -1,3 +1,12 @@
+<a name="0.0.8"></a>
+## 0.0.8 (2017-08-28)
+
+* 0.0.8 ([2eed6b7](https://github.com/wessberg/TypescriptLanguageService/commit/2eed6b7))
+* Bumped version ([bbcc786](https://github.com/wessberg/TypescriptLanguageService/commit/bbcc786))
+* Made non-existing imports return the empty string rather than throw ([95eb389](https://github.com/wessberg/TypescriptLanguageService/commit/95eb389))
+
+
+
 <a name="0.0.7"></a>
 ## 0.0.7 (2017-08-28)
 
