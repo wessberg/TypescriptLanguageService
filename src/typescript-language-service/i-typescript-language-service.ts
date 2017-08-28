@@ -6,6 +6,7 @@ import {IPathUtil} from "@wessberg/pathutil";
 import {IFileLoader} from "@wessberg/fileloader";
 
 export interface ITypescriptLanguageService extends LanguageServiceHost {
+	excludeFiles (match: RegExp|Iterable<RegExp>): void;
 	addFile (options: ITypescriptLanguageServiceAddFileOptions): NodeArray<Statement>;
 	getFile (options: ITypescriptLanguageServiceGetFileOptions): NodeArray<Statement>;
 	removeFile (fileName: string): void;

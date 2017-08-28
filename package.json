@@ -47,7 +47,7 @@
 	},
 	"dependencies": {
 		"@wessberg/fileloader": "^1.1.4",
-		"@wessberg/moduleutil": "^0.0.13",
+		"@wessberg/moduleutil": "0.0.14",
 		"@wessberg/pathutil": "^0.0.5",
 		"tslib": "^1.7.1"
 	},

@@ -5,12 +5,18 @@ import {IFileLoader} from "@wessberg/fileloader";
 import {ITypescriptLanguageServiceAddFileOptions} from "./i-typescript-language-service-add-file-options";
 import {ITypescriptLanguageServiceGetFileOptions} from "./i-typescript-language-service-get-file-options";
 import {IPathUtil} from "@wessberg/pathutil";
+import {ITypescriptLanguageServiceOptions} from "./i-typescript-language-service-options";
 
 /**
  * A host-implementation of Typescripts LanguageService.
  * @author Frederik Wessberg
  */
 export class TypescriptLanguageService implements ITypescriptLanguageService {
+	/**
+	 * The Set of all Regular Expressions for matching files to be excluded
+	 * @type {Set<RegExp>}
+	 */
+	private excludedFiles: Set<RegExp> = new Set();
 
 	/**
 	 * A Map between filenames and their current version and content in the AST.
@@ -26,7 +32,29 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 
 	constructor (private moduleUtil: IModuleUtil,
 							 private pathUtil: IPathUtil,
-							 private fileLoader: IFileLoader) {
+							 private fileLoader: IFileLoader,
+							 options?: Partial<ITypescriptLanguageServiceOptions>) {
+		if (options != null && options.excludedFiles != null) {
+			this.excludeFiles(options.excludedFiles);
+		}
+	}
+
+	/**
+	 * Excludes files from the compiler that matches the provided Regular Expression(s)
+	 * @param {RegExp | Iterable<RegExp>} match
+	 */
+	public excludeFiles (match: RegExp|Iterable<RegExp>): void {
+		if (match instanceof RegExp) this.excludedFiles.add(match);
+		else [...match].forEach(regExpItem => this.excludedFiles.add(regExpItem));
+	}
+
+	/**
+	 * Returns true if the given filepath should be excluded
+	 * @param {string} filepath
+	 * @returns {boolean}
+	 */
+	private isExcluded (filepath: string): boolean {
+		return [...this.excludedFiles].some(regex => regex.test(filepath));
 	}
 
 	/**
@@ -56,7 +84,9 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 				this.files.set(normalizedPath, {version: actualVersion, content: actualContent});
 
 				// Recursively add all missing imports to the LanguageService if 'addImportedFiles' is truthy.
-				if (addImportedFiles != null && addImportedFiles) this.getImportedFilesForFile(resolvedPath).forEach(importedFile => this.addFile({path: importedFile, from: resolvedPath, addImportedFiles}));
+				if (addImportedFiles != null && addImportedFiles) this.getImportedFilesForFile(resolvedPath).forEach(importedFile => {
+					if (!this.isExcluded(importedFile)) this.addFile({path: importedFile, from: resolvedPath, addImportedFiles});
+				});
 			}
 
 			// Retrieve the Statements of the file
