@@ -1,3 +1,12 @@
+<a name="0.0.9"></a>
+## 0.0.9 (2017-09-02)
+
+* 0.0.9 ([1cd98c5](https://github.com/wessberg/TypescriptLanguageService/commit/1cd98c5))
+* Bumped deps. ([2a826af](https://github.com/wessberg/TypescriptLanguageService/commit/2a826af))
+* Bumped version ([b79ad34](https://github.com/wessberg/TypescriptLanguageService/commit/b79ad34))
+
+
+
 <a name="0.0.8"></a>
 ## 0.0.8 (2017-08-28)
 
