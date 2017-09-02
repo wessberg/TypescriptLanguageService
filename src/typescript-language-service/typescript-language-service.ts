@@ -6,6 +6,7 @@ import {ITypescriptLanguageServiceAddFileOptions} from "./i-typescript-language-
 import {ITypescriptLanguageServiceGetFileOptions} from "./i-typescript-language-service-get-file-options";
 import {IPathUtil} from "@wessberg/pathutil";
 import {ITypescriptLanguageServiceOptions} from "./i-typescript-language-service-options";
+import {ITypescriptPackageReassembler} from "@wessberg/typescript-package-reassembler";
 
 /**
  * A host-implementation of Typescripts LanguageService.
@@ -25,6 +26,12 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	private files: Map<string, { version: number; content: string }> = new Map();
 
 	/**
+	 * A suffix to temporarily append to .d.ts files
+	 * @type {string}
+	 */
+	private static readonly DECLARATION_TEMPORARY_SUFFIX = "-temp";
+
+	/**
 	 * The (Typescript) TypescriptLanguageService to use under-the-hood.
 	 * @type {LanguageService}
 	 */
@@ -33,6 +40,7 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	constructor (private moduleUtil: IModuleUtil,
 							 private pathUtil: IPathUtil,
 							 private fileLoader: IFileLoader,
+							 private reassembler: ITypescriptPackageReassembler,
 							 options?: Partial<ITypescriptLanguageServiceOptions>) {
 		if (options != null && options.excludedFiles != null) {
 			this.excludeFiles(options.excludedFiles);
@@ -58,6 +66,47 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	}
 
 	/**
+	 * Reassembles a compiled .js file (though normalized with a .ts extension) with a matching declaration file (.d.ts)
+	 * to re-add "lost" type information after publishing to NPM.
+	 * @param {string} normalizedPath
+	 * @param {string} normalizedContent
+	 * @param {string} declarationPath
+	 * @returns {string}
+	 */
+	private reassemble (normalizedPath: string, normalizedContent: string, declarationPath: string): string {
+		// Add a suffix to the declaration file so it won't override the other one
+		const normalizedDeclarationPath = declarationPath.slice(0, declarationPath.lastIndexOf(".d.ts")) + this.temporaryDeclarationAddition;
+		// Temporarily add the files
+		this.files.set(normalizedPath, {version: 0, content: normalizedContent});
+		this.addFile({path: normalizedDeclarationPath});
+		const compiledStatements = this.getFile({path: normalizedPath});
+		const declarationStatements = this.getFile({path: normalizedDeclarationPath});
+		// Remove the files now
+		this.removeFile(normalizedPath);
+		this.removeFile(normalizedDeclarationPath);
+
+		const {content} = this.reassembler.reassemble({compiledStatements, declarationStatements});
+		return content;
+	}
+
+	/**
+	 * Returns the part that will be added to any temporary declaration file
+	 * @returns {string}
+	 */
+	private get temporaryDeclarationAddition (): string {
+		return `${TypescriptLanguageService.DECLARATION_TEMPORARY_SUFFIX}.ts`;
+	}
+
+	/**
+	 * Clears the part of a path that has been added as a temporary declaration
+	 * @param {string} path
+	 * @returns {string}
+	 */
+	private clearTemporaryDeclarationAddition (path: string): string {
+		return `${path.slice(0, path.lastIndexOf(this.temporaryDeclarationAddition))}.d.ts`;
+	}
+
+	/**
 	 * Adds a new file to the TypescriptLanguageService.
 	 * @param {string} path
 	 * @param {string} from
@@ -68,15 +117,27 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	 */
 	public addFile ({path, from = process.cwd(), content, addImportedFiles}: ITypescriptLanguageServiceAddFileOptions): NodeArray<Statement> {
 		try {
-			// Resolve the absolute, fully qualified path
-			const resolvedPath = this.moduleUtil.resolvePath(path, from);
-			const normalizedPath = this.normalizeExtension(resolvedPath);
+			const isTemporary = path.endsWith(this.temporaryDeclarationAddition);
+			// Resolve the absolute, fully qualified path. If it is a temporary declaration, use that one
+			const resolvedPath = isTemporary ? path : this.moduleUtil.resolvePath(path, from);
+			const normalizedPath = isTemporary ? path : this.normalizeExtension(resolvedPath);
 
 			// Load the contents from the absolute path unless content was given as an argument
-			const actualContent = content == null ? this.fileLoader.loadSync(resolvedPath).toString() : content;
+			let actualContent = content == null ? this.fileLoader.loadSync(isTemporary ? this.clearTemporaryDeclarationAddition(resolvedPath) : resolvedPath).toString() : content;
 
 			// Only actually update the file if it has changed.
-			if (this.needsUpdate(resolvedPath, actualContent)) {
+			if (this.needsUpdate(normalizedPath, actualContent)) {
+
+				// Check if it was actually .js file before normalizing the extension (in which case we want to merge declarations in)
+				if (resolvedPath.endsWith(".js")) {
+
+					// Check for a matching declaration file
+					const [exists, declarationPath] = this.fileLoader.existsWithFirstMatchedExtensionSync(this.pathUtil.clearExtension(resolvedPath), [".d.ts"]);
+					if (exists) {
+						// Merge/Reassemble the declarations with the .js file
+						actualContent = this.reassemble(normalizedPath, actualContent, declarationPath!);
+					}
+				}
 				// Bump the script version
 				const actualVersion = this.getFileVersion(resolvedPath) + 1;
 
@@ -92,8 +153,9 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 			// Retrieve the Statements of the file
 			return this.getFile({path: resolvedPath, from});
 		} catch (ex) {
+			throw ex;
 			// A module attempted to load a file or a module which doesn't exist. Return an empty array.
-			return createNodeArray();
+			// return createNodeArray();
 		}
 	}
 
@@ -339,6 +401,10 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	 * @returns {string}
 	 */
 	private normalizeExtension (filePath: string): string {
+		if (filePath.endsWith(".d.ts")) {
+			// Make it appear as a proper Typescript file
+			return filePath.slice(0, filePath.lastIndexOf(".d.ts")) + ".ts";
+		}
 		return this.pathUtil.setExtension(filePath, ".ts");
 	}
 
