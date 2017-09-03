@@ -4,6 +4,7 @@ import {ITypescriptLanguageServiceGetFileOptions} from "./i-typescript-language-
 import {IModuleUtil} from "@wessberg/moduleutil";
 import {IPathUtil} from "@wessberg/pathutil";
 import {IFileLoader} from "@wessberg/fileloader";
+import {ITypescriptLanguageServiceContent} from "./i-typescript-language-service-content";
 
 export interface ITypescriptLanguageService extends LanguageServiceHost {
 	excludeFiles (match: RegExp|Iterable<RegExp>): void;
@@ -11,7 +12,7 @@ export interface ITypescriptLanguageService extends LanguageServiceHost {
 	getFile (options: ITypescriptLanguageServiceGetFileOptions): NodeArray<Statement>;
 	removeFile (fileName: string): void;
 	getFileVersion (filePath: string): number;
-	getFileContent (fileName: string, isTemporary?: boolean): string;
+	getFileContent (fileName: string, isTemporary?: boolean): ITypescriptLanguageServiceContent;
 	getDefinitionAtPosition (filename: string, position: number): DefinitionInfo[];
 	getDefinitionAtStatement (statement: Statement|Node|Expression): DefinitionInfo[];
 	getTypeDefinitionAtPosition (filename: string, position: number): DefinitionInfo[];

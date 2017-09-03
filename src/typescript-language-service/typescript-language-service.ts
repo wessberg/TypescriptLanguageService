@@ -7,6 +7,8 @@ import {ITypescriptLanguageServiceGetFileOptions} from "./i-typescript-language-
 import {IPathUtil} from "@wessberg/pathutil";
 import {ITypescriptLanguageServiceOptions} from "./i-typescript-language-service-options";
 import {ITypescriptPackageReassembler} from "@wessberg/typescript-package-reassembler";
+import {ITypescriptLanguageServiceFile} from "./i-typescript-language-service-file";
+import {ITypescriptLanguageServiceContent} from "./i-typescript-language-service-content";
 
 /**
  * A host-implementation of Typescripts LanguageService.
@@ -21,9 +23,9 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 
 	/**
 	 * A Map between filenames and their current version and content in the AST.
-	 * @type {Map<string, {version: number, content: string}>}
+	 * @type {Map<string, ITypescriptLanguageServiceFile>}
 	 */
-	private files: Map<string, { version: number; content: string }> = new Map();
+	private files: Map<string, ITypescriptLanguageServiceFile> = new Map();
 
 	/**
 	 * A suffix to temporarily append to .d.ts files
@@ -77,7 +79,7 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 		// Add a suffix to the declaration file so it won't override the other one
 		const normalizedDeclarationPath = declarationPath.slice(0, declarationPath.lastIndexOf(".d.ts")) + this.temporaryDeclarationAddition;
 		// Temporarily add the files
-		this.files.set(normalizedPath, {version: 0, content: normalizedContent});
+		this.files.set(normalizedPath, {version: 0, content: normalizedContent, rawContent: normalizedContent});
 		this.addFile({path: normalizedDeclarationPath});
 		const compiledStatements = this.getFile({path: normalizedPath});
 		const declarationStatements = this.getFile({path: normalizedDeclarationPath});
@@ -124,6 +126,8 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 
 			// Load the contents from the absolute path unless content was given as an argument
 			let actualContent = content == null ? this.fileLoader.loadSync(isTemporary ? this.clearTemporaryDeclarationAddition(resolvedPath) : resolvedPath).toString() : content;
+			// Make a copy of the actual content
+			const rawContent = actualContent;
 
 			// Only actually update the file if it has changed.
 			if (this.needsUpdate(normalizedPath, actualContent)) {
@@ -142,7 +146,7 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 				const actualVersion = this.getFileVersion(resolvedPath) + 1;
 
 				// Store it as a parsed file
-				this.files.set(normalizedPath, {version: actualVersion, content: actualContent});
+				this.files.set(normalizedPath, {version: actualVersion, content: actualContent, rawContent});
 
 				// Recursively add all missing imports to the LanguageService if 'addImportedFiles' is truthy.
 				if (addImportedFiles != null && addImportedFiles) this.getImportedFilesForFile(resolvedPath).forEach(importedFile => {
@@ -227,12 +231,12 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	/**
 	 * Gets the last contents of the given filename.
 	 * @param {string} fileName
-	 * @returns {string}
+	 * @returns {ITypescriptLanguageServiceContent}
 	 */
-	public getFileContent (fileName: string): string {
+	public getFileContent (fileName: string): ITypescriptLanguageServiceContent {
 		const script = this.files.get(this.resolveAndNormalize(fileName));
-		if (script == null) return "";
-		return script.content.toString();
+		if (script == null) return {content: "", rawContent: ""};
+		return {content: script.content, rawContent: script.rawContent};
 	}
 
 	/**
@@ -357,7 +361,7 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	 * @returns {string[]}
 	 */
 	public getImportedFilesForFile (filename: string): string[] {
-		const content = this.getFileContent(filename);
+		const {content} = this.getFileContent(filename);
 		return this.getImportedFilesForContent(content, filename);
 	}
 
@@ -391,8 +395,8 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	 * @returns {boolean}
 	 */
 	private needsUpdate (filePath: string, content: string): boolean {
-		const oldContent = this.getFileContent(filePath);
-		return !(content === oldContent);
+		const {rawContent} = this.getFileContent(filePath);
+		return content !== rawContent;
 	}
 
 	/**
