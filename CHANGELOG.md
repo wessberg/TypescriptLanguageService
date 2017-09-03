@@ -1,3 +1,12 @@
+<a name="0.0.10"></a>
+## 0.0.10 (2017-09-03)
+
+* 0.0.10 ([4364e28](https://github.com/wessberg/TypescriptLanguageService/commit/4364e28))
+* Bumped version ([d64a671](https://github.com/wessberg/TypescriptLanguageService/commit/d64a671))
+* Made improvements in diffing reassembled files ([8ec9326](https://github.com/wessberg/TypescriptLanguageService/commit/8ec9326))
+
+
+
 <a name="0.0.9"></a>
 ## 0.0.9 (2017-09-02)
 
