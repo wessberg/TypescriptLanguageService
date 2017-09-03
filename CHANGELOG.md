@@ -1,3 +1,12 @@
+<a name="0.0.11"></a>
+## 0.0.11 (2017-09-03)
+
+* 0.0.11 ([0b6d7da](https://github.com/wessberg/TypescriptLanguageService/commit/0b6d7da))
+* Added a 'getAddPath' method ([04c09cb](https://github.com/wessberg/TypescriptLanguageService/commit/04c09cb))
+* Bumped version ([a71d8e9](https://github.com/wessberg/TypescriptLanguageService/commit/a71d8e9))
+
+
+
 <a name="0.0.10"></a>
 ## 0.0.10 (2017-09-03)
 
