@@ -5,9 +5,11 @@ import {IModuleUtil} from "@wessberg/moduleutil";
 import {IPathUtil} from "@wessberg/pathutil";
 import {IFileLoader} from "@wessberg/fileloader";
 import {ITypescriptLanguageServiceContent} from "./i-typescript-language-service-content";
+import {ITypescriptLanguageServiceAddPath} from "./i-typescript-language-service-add-path";
 
 export interface ITypescriptLanguageService extends LanguageServiceHost {
 	excludeFiles (match: RegExp|Iterable<RegExp>): void;
+	getAddPath (path: string, from?: string): ITypescriptLanguageServiceAddPath;
 	addFile (options: ITypescriptLanguageServiceAddFileOptions): NodeArray<Statement>;
 	getFile (options: ITypescriptLanguageServiceGetFileOptions): NodeArray<Statement>;
 	removeFile (fileName: string): void;

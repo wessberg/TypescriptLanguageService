@@ -9,6 +9,7 @@ import {ITypescriptLanguageServiceOptions} from "./i-typescript-language-service
 import {ITypescriptPackageReassembler} from "@wessberg/typescript-package-reassembler";
 import {ITypescriptLanguageServiceFile} from "./i-typescript-language-service-file";
 import {ITypescriptLanguageServiceContent} from "./i-typescript-language-service-content";
+import {ITypescriptLanguageServiceAddPath} from "./i-typescript-language-service-add-path";
 
 /**
  * A host-implementation of Typescripts LanguageService.
@@ -109,6 +110,24 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	}
 
 	/**
+	 * Gets info about the path that will be added to Typescript's AST
+	 * @param {string} path
+	 * @param {string} from
+	 * @returns {ITypescriptLanguageServiceAddPath}
+	 */
+	public getAddPath (path: string, from = process.cwd()): ITypescriptLanguageServiceAddPath {
+		const isTemporary = path.endsWith(this.temporaryDeclarationAddition);
+		// Resolve the absolute, fully qualified path. If it is a temporary declaration, use that one
+		const resolvedPath = isTemporary ? path : this.moduleUtil.resolvePath(path, from);
+		const normalizedPath = isTemporary ? path : this.normalizeExtension(resolvedPath);
+		return {
+			resolvedPath,
+			normalizedPath,
+			isTemporary
+		};
+	}
+
+	/**
 	 * Adds a new file to the TypescriptLanguageService.
 	 * @param {string} path
 	 * @param {string} from
@@ -118,49 +137,40 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	 * @returns {NodeArray<Statement>}
 	 */
 	public addFile ({path, from = process.cwd(), content, addImportedFiles}: ITypescriptLanguageServiceAddFileOptions): NodeArray<Statement> {
-		try {
-			const isTemporary = path.endsWith(this.temporaryDeclarationAddition);
-			// Resolve the absolute, fully qualified path. If it is a temporary declaration, use that one
-			const resolvedPath = isTemporary ? path : this.moduleUtil.resolvePath(path, from);
-			const normalizedPath = isTemporary ? path : this.normalizeExtension(resolvedPath);
+		const {isTemporary, resolvedPath, normalizedPath} = this.getAddPath(path, from);
 
-			// Load the contents from the absolute path unless content was given as an argument
-			let actualContent = content == null ? this.fileLoader.loadSync(isTemporary ? this.clearTemporaryDeclarationAddition(resolvedPath) : resolvedPath).toString() : content;
-			// Make a copy of the actual content
-			const rawContent = actualContent;
+		// Load the contents from the absolute path unless content was given as an argument
+		let actualContent = content == null ? this.fileLoader.loadSync(isTemporary ? this.clearTemporaryDeclarationAddition(resolvedPath) : resolvedPath).toString() : content;
+		// Make a copy of the actual content
+		const rawContent = actualContent;
 
-			// Only actually update the file if it has changed.
-			if (this.needsUpdate(normalizedPath, actualContent)) {
+		// Only actually update the file if it has changed.
+		if (this.needsUpdate(normalizedPath, actualContent)) {
 
-				// Check if it was actually .js file before normalizing the extension (in which case we want to merge declarations in)
-				if (resolvedPath.endsWith(".js")) {
+			// Check if it was actually .js file before normalizing the extension (in which case we want to merge declarations in)
+			if (resolvedPath.endsWith(".js")) {
 
-					// Check for a matching declaration file
-					const [exists, declarationPath] = this.fileLoader.existsWithFirstMatchedExtensionSync(this.pathUtil.clearExtension(resolvedPath), [".d.ts"]);
-					if (exists) {
-						// Merge/Reassemble the declarations with the .js file
-						actualContent = this.reassemble(normalizedPath, actualContent, declarationPath!);
-					}
+				// Check for a matching declaration file
+				const [exists, declarationPath] = this.fileLoader.existsWithFirstMatchedExtensionSync(this.pathUtil.clearExtension(resolvedPath), [".d.ts"]);
+				if (exists) {
+					// Merge/Reassemble the declarations with the .js file
+					actualContent = this.reassemble(normalizedPath, actualContent, declarationPath!);
 				}
-				// Bump the script version
-				const actualVersion = this.getFileVersion(resolvedPath) + 1;
-
-				// Store it as a parsed file
-				this.files.set(normalizedPath, {version: actualVersion, content: actualContent, rawContent});
-
-				// Recursively add all missing imports to the LanguageService if 'addImportedFiles' is truthy.
-				if (addImportedFiles != null && addImportedFiles) this.getImportedFilesForFile(resolvedPath).forEach(importedFile => {
-					if (!this.isExcluded(importedFile)) this.addFile({path: importedFile, from: resolvedPath, addImportedFiles});
-				});
 			}
+			// Bump the script version
+			const actualVersion = this.getFileVersion(resolvedPath) + 1;
 
-			// Retrieve the Statements of the file
-			return this.getFile({path: resolvedPath, from});
-		} catch (ex) {
-			throw ex;
-			// A module attempted to load a file or a module which doesn't exist. Return an empty array.
-			// return createNodeArray();
+			// Store it as a parsed file
+			this.files.set(normalizedPath, {version: actualVersion, content: actualContent, rawContent});
+
+			// Recursively add all missing imports to the LanguageService if 'addImportedFiles' is truthy.
+			if (addImportedFiles != null && addImportedFiles) this.getImportedFilesForFile(resolvedPath).forEach(importedFile => {
+				if (!this.isExcluded(importedFile)) this.addFile({path: importedFile, from: resolvedPath, addImportedFiles});
+			});
 		}
+
+		// Retrieve the Statements of the file
+		return this.getFile({path: resolvedPath, from});
 	}
 
 	/**
