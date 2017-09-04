@@ -11,6 +11,8 @@ import {ITypescriptLanguageServiceFile} from "./i-typescript-language-service-fi
 import {ITypescriptLanguageServiceContent} from "./i-typescript-language-service-content";
 import {ITypescriptLanguageServiceAddPath} from "./i-typescript-language-service-add-path";
 import {ITypescriptLanguageServicePathInfo} from "./i-typescript-language-service-path-info";
+import {isTypescriptLanguageServicePathInfo} from "./is-typescript-language-service-path-info";
+import {ITypescriptLanguageServiceAddImportedFiles} from "./i-typescript-language-service-add-imported-files";
 
 /**
  * A host-implementation of Typescripts LanguageService.
@@ -148,16 +150,13 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 
 	/**
 	 * Adds a new file to the TypescriptLanguageService.
-	 * @param {string} path
-	 * @param {string} from
-	 * @param {string} [content]
-	 * @param {number} [version]
-	 * @param {boolean} [addImportedFiles]
-	 * @param {ITypescriptLanguageServicePathInfo} [pathInfo]
+	 * @param {ITypescriptLanguageServiceAddFileOptions & ITypescriptLanguageServiceAddImportedFiles | ITypescriptLanguageServicePathInfo & ITypescriptLanguageServiceAddImportedFiles} options
 	 * @returns {NodeArray<Statement>}
 	 */
-	public addFile ({path, from = process.cwd(), content, addImportedFiles, pathInfo}: ITypescriptLanguageServiceAddFileOptions): NodeArray<Statement> {
-		const {resolvedPath, normalizedPath, needsUpdate, rawContent, content: actualContent} = pathInfo == null ? this.getPathInfo(path, from, content) : pathInfo;
+	public addFile (options: (ITypescriptLanguageServiceAddFileOptions & ITypescriptLanguageServiceAddImportedFiles)|(ITypescriptLanguageServicePathInfo & ITypescriptLanguageServiceAddImportedFiles)): NodeArray<Statement> {
+		const pathInfo: ITypescriptLanguageServicePathInfo = isTypescriptLanguageServicePathInfo(options) ? options : this.getPathInfo(options.path, options.from == null ? process.cwd() : options.from, options.content);
+		const {resolvedPath, normalizedPath, needsUpdate, rawContent, content: actualContent} = pathInfo;
+		const addImportedFiles = options.addImportedFiles == null ? false : options.addImportedFiles;
 
 		// Only actually update the file if it has changed.
 		if (needsUpdate) {
@@ -169,24 +168,23 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 			this.files.set(normalizedPath, {version: actualVersion, content: actualContent, rawContent});
 
 			// Recursively add all missing imports to the LanguageService if 'addImportedFiles' is truthy.
-			if (addImportedFiles != null && addImportedFiles) this.getImportedFilesForFile(resolvedPath).forEach(importedFile => {
+			if (addImportedFiles) this.getImportedFilesForFile(resolvedPath).forEach(importedFile => {
 				if (!this.isExcluded(importedFile)) this.addFile({path: importedFile, from: resolvedPath, addImportedFiles});
 			});
 		}
 
 		// Retrieve the Statements of the file
-		return this.getFile({path, from});
+		return this.getFile(options);
 	}
 
 	/**
 	 * Gets the Statements associated with the given filename.
-	 * @param {string} path
-	 * @param {string} [from]
+	 * @param {ITypescriptLanguageServiceGetFileOptions | ITypescriptLanguageServicePathInfo} options
 	 * @returns {NodeArray<Statement>}
 	 */
-	public getFile ({path, from = process.cwd()}: ITypescriptLanguageServiceGetFileOptions): NodeArray<Statement> {
+	public getFile (options: ITypescriptLanguageServiceGetFileOptions|ITypescriptLanguageServicePathInfo): NodeArray<Statement> {
 		// Resolve the absolute, fully qualified path
-		const {normalizedPath} = this.getAddPath(path, from);
+		const {normalizedPath} = isTypescriptLanguageServicePathInfo(options) ? options : this.getAddPath(options.path, options.from == null ? process.cwd() : options.from);
 		const file = this.languageService.getProgram().getSourceFile(normalizedPath);
 		if (file == null) return createNodeArray();
 		return file == null ? createNodeArray() : file.statements;
