@@ -1,3 +1,12 @@
+<a name="0.0.13"></a>
+## 0.0.13 (2017-09-04)
+
+* 0.0.13 ([a517541](https://github.com/wessberg/TypescriptLanguageService/commit/a517541))
+* Added a 'getPathInfo' method ([10a58e8](https://github.com/wessberg/TypescriptLanguageService/commit/10a58e8))
+* Bumped version ([fd9cf71](https://github.com/wessberg/TypescriptLanguageService/commit/fd9cf71))
+
+
+
 <a name="0.0.12"></a>
 ## 0.0.12 (2017-09-04)
 
