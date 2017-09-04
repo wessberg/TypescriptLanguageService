@@ -1,3 +1,12 @@
+<a name="0.0.12"></a>
+## 0.0.12 (2017-09-04)
+
+* 0.0.12 ([deb9708](https://github.com/wessberg/TypescriptLanguageService/commit/deb9708))
+* Bumped version ([1751dec](https://github.com/wessberg/TypescriptLanguageService/commit/1751dec))
+* Refined resolution logic ([3baf20a](https://github.com/wessberg/TypescriptLanguageService/commit/3baf20a))
+
+
+
 <a name="0.0.11"></a>
 ## 0.0.11 (2017-09-03)
 
