@@ -14,5 +14,6 @@ const languageService = new TypescriptLanguageService(moduleUtil, pathUtil, file
 test("foo", t => {
 	languageService.addFile({path: "./test/static/foo", addImportedFiles: true});
 	const res = languageService.getImportedFilesForFile("./test/static/foo");
+	console.log(res);
 	t.true(res != null);
 });
