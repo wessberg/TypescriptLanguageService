@@ -153,10 +153,11 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	 * @param {string} [content]
 	 * @param {number} [version]
 	 * @param {boolean} [addImportedFiles]
+	 * @param {ITypescriptLanguageServicePathInfo} [pathInfo]
 	 * @returns {NodeArray<Statement>}
 	 */
-	public addFile ({path, from = process.cwd(), content, addImportedFiles}: ITypescriptLanguageServiceAddFileOptions): NodeArray<Statement> {
-		const {resolvedPath, normalizedPath, needsUpdate, rawContent, content: actualContent} = this.getPathInfo(path, from, content);
+	public addFile ({path, from = process.cwd(), content, addImportedFiles, pathInfo}: ITypescriptLanguageServiceAddFileOptions): NodeArray<Statement> {
+		const {resolvedPath, normalizedPath, needsUpdate, rawContent, content: actualContent} = pathInfo == null ? this.getPathInfo(path, from, content) : pathInfo;
 
 		// Only actually update the file if it has changed.
 		if (needsUpdate) {
