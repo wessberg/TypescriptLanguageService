@@ -14,7 +14,7 @@ export interface ITypescriptLanguageService extends LanguageServiceHost {
 	getPathInfo (path: string, from?: string, content?: string): ITypescriptLanguageServicePathInfo;
 	getAddPath (path: string, from?: string): ITypescriptLanguageServiceAddPath;
 	addFile (options: (ITypescriptLanguageServiceAddFileOptions & ITypescriptLanguageServiceAddImportedFiles)|(ITypescriptLanguageServicePathInfo & ITypescriptLanguageServiceAddImportedFiles)): NodeArray<Statement>;
-	getFile (options: ITypescriptLanguageServiceGetFileOptions): NodeArray<Statement>;
+	getFile (options: ITypescriptLanguageServiceGetFileOptions|ITypescriptLanguageServicePathInfo): NodeArray<Statement>;
 	removeFile (fileName: string): void;
 	getFileVersion (filePath: string): number;
 	getFileContent (fileName: string, isTemporary?: boolean): ITypescriptLanguageServiceContent;
