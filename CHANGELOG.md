@@ -1,3 +1,12 @@
+<a name="0.0.15"></a>
+## 0.0.15 (2017-09-04)
+
+* 0.0.15 ([13d9323](https://github.com/wessberg/TypescriptLanguageService/commit/13d9323))
+* Bumped version ([1af077c](https://github.com/wessberg/TypescriptLanguageService/commit/1af077c))
+* Made it possible to add a PathInfo to addFile ([d315832](https://github.com/wessberg/TypescriptLanguageService/commit/d315832))
+
+
+
 <a name="0.0.14"></a>
 ## 0.0.14 (2017-09-04)
 
