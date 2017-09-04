@@ -10,6 +10,7 @@ import {ITypescriptPackageReassembler} from "@wessberg/typescript-package-reasse
 import {ITypescriptLanguageServiceFile} from "./i-typescript-language-service-file";
 import {ITypescriptLanguageServiceContent} from "./i-typescript-language-service-content";
 import {ITypescriptLanguageServiceAddPath} from "./i-typescript-language-service-add-path";
+import {ITypescriptLanguageServicePathInfo} from "./i-typescript-language-service-path-info";
 
 /**
  * A host-implementation of Typescripts LanguageService.
@@ -71,6 +72,47 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	}
 
 	/**
+	 * Gets relevant path info
+	 * @param {string} path
+	 * @param {string} from
+	 * @param {string} content
+	 * @returns {ITypescriptLanguageServicePathInfo}
+	 */
+	public getPathInfo (path: string, from = process.cwd(), content?: string): ITypescriptLanguageServicePathInfo {
+		const {isTemporary, resolvedPath, normalizedPath} = this.getAddPath(path, from);
+
+		// Load the contents from the absolute path unless content was given as an argument
+		let actualContent = content == null ? this.fileLoader.loadSync(isTemporary ? this.clearTemporaryDeclarationAddition(resolvedPath) : resolvedPath).toString() : content;
+		// Make a copy of the actual content
+		const rawContent = actualContent;
+
+		// Check if the file needs an update
+		const needsUpdate = this.needsUpdate(normalizedPath, actualContent);
+
+		if (needsUpdate) {
+			// Check if it was actually .js file before normalizing the extension (in which case we want to merge declarations in)
+			if (resolvedPath.endsWith(".js")) {
+
+				// Check for a matching declaration file
+				const [exists, declarationPath] = this.fileLoader.existsWithFirstMatchedExtensionSync(this.pathUtil.clearExtension(resolvedPath), [".d.ts"]);
+				if (exists) {
+					// Merge/Reassemble the declarations with the .js file
+					actualContent = this.reassemble(normalizedPath, actualContent, declarationPath!);
+				}
+			}
+		}
+
+		return {
+			isTemporary,
+			resolvedPath,
+			normalizedPath,
+			rawContent: rawContent,
+			content: actualContent,
+			needsUpdate
+		};
+	}
+
+	/**
 	 * Gets info about the path that will be added to Typescript's AST
 	 * @param {string} path
 	 * @param {string} from
@@ -114,26 +156,11 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	 * @returns {NodeArray<Statement>}
 	 */
 	public addFile ({path, from = process.cwd(), content, addImportedFiles}: ITypescriptLanguageServiceAddFileOptions): NodeArray<Statement> {
-		const {isTemporary, resolvedPath, normalizedPath} = this.getAddPath(path, from);
-
-		// Load the contents from the absolute path unless content was given as an argument
-		let actualContent = content == null ? this.fileLoader.loadSync(isTemporary ? this.clearTemporaryDeclarationAddition(resolvedPath) : resolvedPath).toString() : content;
-		// Make a copy of the actual content
-		const rawContent = actualContent;
+		const {resolvedPath, normalizedPath, needsUpdate, rawContent, content: actualContent} = this.getPathInfo(path, from, content);
 
 		// Only actually update the file if it has changed.
-		if (this.needsUpdate(normalizedPath, actualContent)) {
+		if (needsUpdate) {
 
-			// Check if it was actually .js file before normalizing the extension (in which case we want to merge declarations in)
-			if (resolvedPath.endsWith(".js")) {
-
-				// Check for a matching declaration file
-				const [exists, declarationPath] = this.fileLoader.existsWithFirstMatchedExtensionSync(this.pathUtil.clearExtension(resolvedPath), [".d.ts"]);
-				if (exists) {
-					// Merge/Reassemble the declarations with the .js file
-					actualContent = this.reassemble(normalizedPath, actualContent, declarationPath!);
-				}
-			}
 			// Bump the script version
 			const actualVersion = this.getFileVersion(resolvedPath) + 1;
 
