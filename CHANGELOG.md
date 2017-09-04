@@ -1,3 +1,12 @@
+<a name="0.0.16"></a>
+## 0.0.16 (2017-09-04)
+
+* 0.0.16 ([61a0be3](https://github.com/wessberg/TypescriptLanguageService/commit/61a0be3))
+* Bumped version ([9b73a9e](https://github.com/wessberg/TypescriptLanguageService/commit/9b73a9e))
+* Corrected a typing ([58dc753](https://github.com/wessberg/TypescriptLanguageService/commit/58dc753))
+
+
+
 <a name="0.0.15"></a>
 ## 0.0.15 (2017-09-04)
 
