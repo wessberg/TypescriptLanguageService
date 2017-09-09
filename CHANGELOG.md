@@ -1,3 +1,12 @@
+<a name="0.0.22"></a>
+## 0.0.22 (2017-09-09)
+
+* 0.0.22 ([60dddfb](https://github.com/wessberg/TypescriptLanguageService/commit/60dddfb))
+* Added 'getQuickInfo' methods ([4ab8288](https://github.com/wessberg/TypescriptLanguageService/commit/4ab8288))
+* Bumped version ([f0acd19](https://github.com/wessberg/TypescriptLanguageService/commit/f0acd19))
+
+
+
 <a name="0.0.21"></a>
 ## 0.0.21 (2017-09-09)
 
