@@ -1,3 +1,12 @@
+<a name="0.0.19"></a>
+## 0.0.19 (2017-09-09)
+
+* 0.0.19 ([a1a3eaa](https://github.com/wessberg/TypescriptLanguageService/commit/a1a3eaa))
+* Bumped version ([48ef017](https://github.com/wessberg/TypescriptLanguageService/commit/48ef017))
+* Changed return type for 'getImportedFilesFor*' to instead return a dict ([3584afb](https://github.com/wessberg/TypescriptLanguageService/commit/3584afb))
+
+
+
 <a name="0.0.18"></a>
 ## 0.0.18 (2017-09-04)
 
