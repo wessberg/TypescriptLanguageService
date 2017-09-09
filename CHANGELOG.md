@@ -1,3 +1,12 @@
+<a name="0.0.20"></a>
+## 0.0.20 (2017-09-09)
+
+* 0.0.20 ([3787b1e](https://github.com/wessberg/TypescriptLanguageService/commit/3787b1e))
+* Added interface as export ([bf06b0d](https://github.com/wessberg/TypescriptLanguageService/commit/bf06b0d))
+* Bumped version ([0981527](https://github.com/wessberg/TypescriptLanguageService/commit/0981527))
+
+
+
 <a name="0.0.19"></a>
 ## 0.0.19 (2017-09-09)
 
