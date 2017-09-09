@@ -1,4 +1,4 @@
-import {CompilerOptions, createDocumentRegistry, createLanguageService, createNodeArray, DefinitionInfo, Expression, getDefaultLibFilePath, ImplementationLocation, IScriptSnapshot, LanguageService, ModuleKind, Node, NodeArray, preProcessFile, ReferencedSymbol, ScriptSnapshot, ScriptTarget, Statement} from "typescript";
+import {CompilerOptions, createDocumentRegistry, createLanguageService, createNodeArray, DefinitionInfo, QuickInfo, getDefaultLibFilePath, ImplementationLocation, IScriptSnapshot, LanguageService, ModuleKind, Node, NodeArray, preProcessFile, ReferencedSymbol, ScriptSnapshot, ScriptTarget, Statement} from "typescript";
 import {ITypescriptLanguageService} from "./i-typescript-language-service";
 import {IModuleUtil} from "@wessberg/moduleutil";
 import {IFileLoader} from "@wessberg/fileloader";
@@ -154,7 +154,7 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	 * @param {ITypescriptLanguageServiceAddFileOptions & ITypescriptLanguageServiceAddImportedFiles | ITypescriptLanguageServicePathInfo & ITypescriptLanguageServiceAddImportedFiles} options
 	 * @returns {NodeArray<Statement>}
 	 */
-	public addFile (options: (ITypescriptLanguageServiceAddFileOptions & ITypescriptLanguageServiceAddImportedFiles)|(ITypescriptLanguageServicePathInfo & ITypescriptLanguageServiceAddImportedFiles)): NodeArray<Statement> {
+	public addFile (options: (ITypescriptLanguageServiceAddFileOptions&ITypescriptLanguageServiceAddImportedFiles)|(ITypescriptLanguageServicePathInfo&ITypescriptLanguageServiceAddImportedFiles)): NodeArray<Statement> {
 		const pathInfo: ITypescriptLanguageServicePathInfo = isTypescriptLanguageServicePathInfo(options) ? options : this.getPathInfo(options.path, options.from == null ? process.cwd() : options.from, options.content);
 		const {resolvedPath, normalizedPath, needsUpdate, rawContent, content: actualContent} = pathInfo;
 		const addImportedFiles = options.addImportedFiles == null ? false : options.addImportedFiles;
@@ -303,10 +303,10 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 
 	/**
 	 * Gets the DefinitionInfo for the provided Statement
-	 * @param {Statement | Expression | Node} statement
+	 * @param {Node} statement
 	 * @returns {DefinitionInfo[]}
 	 */
-	public getDefinitionAtStatement (statement: Statement|Expression|Node): DefinitionInfo[] {
+	public getDefinitionAtStatement (statement: Node): DefinitionInfo[] {
 		const filePath = statement.getSourceFile().fileName;
 		const position = statement.pos;
 		return this.languageService.getDefinitionAtPosition(filePath, position);
@@ -325,10 +325,10 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 
 	/**
 	 * Gets the Type DefinitionInfo at the position of the provided Statement.
-	 * @param {Statement | Expression | Node} statement
+	 * @param {Node} statement
 	 * @returns {DefinitionInfo[]}
 	 */
-	public getTypeDefinitionAtStatement (statement: Statement|Expression|Node): DefinitionInfo[] {
+	public getTypeDefinitionAtStatement (statement: Node): DefinitionInfo[] {
 		const filePath = statement.getSourceFile().fileName;
 		const position = statement.pos;
 		return this.languageService.getTypeDefinitionAtPosition(filePath, position);
@@ -347,13 +347,35 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 
 	/**
 	 * Finds all references for the identifier associated with the provided Statement.
-	 * @param {Statement | Expression | Node} statement
+	 * @param {Node} statement
 	 * @returns {ReferencedSymbol[]}
 	 */
-	public findReferencesForStatement (statement: Statement|Expression|Node): ReferencedSymbol[] {
+	public findReferencesForStatement (statement: Node): ReferencedSymbol[] {
 		const filePath = statement.getSourceFile().fileName;
 		const position = statement.pos;
 		return this.languageService.findReferences(filePath, position);
+	}
+
+	/**
+	 * Gets QuickInfo for the provided file on the provided position
+	 * @param {string} filename
+	 * @param {number} position
+	 * @returns {QuickInfo}
+	 */
+	public getQuickInfoAtPosition (filename: string, position: number): QuickInfo {
+		const {normalizedPath} = this.getAddPath(filename);
+		return this.languageService.getQuickInfoAtPosition(normalizedPath, position);
+	}
+
+	/**
+	 * Gets QuickInfo for the provided statement
+	 * @param {Node} statement
+	 * @returns {ImplementationLocation[]}
+	 */
+	public getQuickInfoForStatement (statement: Node): QuickInfo {
+		const filePath = statement.getSourceFile().fileName;
+		const position = statement.pos;
+		return this.languageService.getQuickInfoAtPosition(filePath, position);
 	}
 
 	/**
@@ -369,10 +391,10 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 
 	/**
 	 * Gets the implementation for the interface associated with the given Statement,
-	 * @param {Statement | Expression | Node} statement
+	 * @param {Node} statement
 	 * @returns {ImplementationLocation[]}
 	 */
-	public getImplementationForStatement (statement: Statement|Expression|Node): ImplementationLocation[] {
+	public getImplementationForStatement (statement: Node): ImplementationLocation[] {
 		const filePath = statement.getSourceFile().fileName;
 		const position = statement.pos;
 		return this.languageService.getImplementationAtPosition(filePath, position);
@@ -390,10 +412,10 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 
 	/**
 	 * Gets all imported files for the file that has the provided Statement.
-	 * @param {Statement | Expression | Node} statement
+	 * @param {Node} statement
 	 * @returns {ITypescriptLanguageServiceImportPath[]}
 	 */
-	public getImportedFilesForStatementFile (statement: Statement|Expression|Node): ITypescriptLanguageServiceImportPath[] {
+	public getImportedFilesForStatementFile (statement: Node): ITypescriptLanguageServiceImportPath[] {
 		return this.getImportedFilesForFile(statement.getSourceFile().fileName);
 	}
 
@@ -405,7 +427,7 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	 */
 	public getImportedFilesForContent (content: string, from: string): ITypescriptLanguageServiceImportPath[] {
 		return preProcessFile(content, true, true).importedFiles
-			// Remove all native built-in modules and non-existing files.
+		// Remove all native built-in modules and non-existing files.
 			.filter(file => file.fileName != null && file.fileName.length > 0 && !this.moduleUtil.builtInModules.has(file.fileName))
 			// Take file names.
 			.map(importedFile => {

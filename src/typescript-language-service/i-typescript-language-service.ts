@@ -1,4 +1,4 @@
-import {DefinitionInfo, Expression, ImplementationLocation, LanguageServiceHost, Node, ReferencedSymbol, Statement, NodeArray} from "typescript";
+import {DefinitionInfo, ImplementationLocation, LanguageServiceHost, QuickInfo, Node, NodeArray, ReferencedSymbol, Statement} from "typescript";
 import {ITypescriptLanguageServiceAddFileOptions} from "./i-typescript-language-service-add-file-options";
 import {ITypescriptLanguageServiceGetFileOptions} from "./i-typescript-language-service-get-file-options";
 import {IModuleUtil} from "@wessberg/moduleutil";
@@ -14,21 +14,23 @@ export interface ITypescriptLanguageService extends LanguageServiceHost {
 	excludeFiles (match: RegExp|Iterable<RegExp>): void;
 	getPathInfo (path: string, from?: string, content?: string): ITypescriptLanguageServicePathInfo;
 	getAddPath (path: string, from?: string): ITypescriptLanguageServiceAddPath;
-	addFile (options: (ITypescriptLanguageServiceAddFileOptions & ITypescriptLanguageServiceAddImportedFiles)|(ITypescriptLanguageServicePathInfo & ITypescriptLanguageServiceAddImportedFiles)): NodeArray<Statement>;
+	addFile (options: (ITypescriptLanguageServiceAddFileOptions&ITypescriptLanguageServiceAddImportedFiles)|(ITypescriptLanguageServicePathInfo&ITypescriptLanguageServiceAddImportedFiles)): NodeArray<Statement>;
 	getFile (options: ITypescriptLanguageServiceGetFileOptions|ITypescriptLanguageServicePathInfo): NodeArray<Statement>;
 	removeFile (fileName: string): void;
 	getFileVersion (filePath: string): number;
 	getFileContent (fileName: string, isTemporary?: boolean): ITypescriptLanguageServiceContent;
+	getQuickInfoAtPosition (filename: string, position: number): QuickInfo;
+	getQuickInfoForStatement (statement: Node): QuickInfo;
 	getDefinitionAtPosition (filename: string, position: number): DefinitionInfo[];
-	getDefinitionAtStatement (statement: Statement|Node|Expression): DefinitionInfo[];
+	getDefinitionAtStatement (statement: Node): DefinitionInfo[];
 	getTypeDefinitionAtPosition (filename: string, position: number): DefinitionInfo[];
-	getTypeDefinitionAtStatement (statement: Statement|Expression|Node): DefinitionInfo[];
+	getTypeDefinitionAtStatement (statement: Node): DefinitionInfo[];
 	findReferencesForPosition (filename: string, position: number): ReferencedSymbol[];
-	findReferencesForStatement (statement: Statement|Expression|Node): ReferencedSymbol[];
+	findReferencesForStatement (statement: Node): ReferencedSymbol[];
 	getImplementationAtPosition (filename: string, position: number): ImplementationLocation[];
-	getImplementationForStatement (statement: Statement|Expression|Node): ImplementationLocation[];
+	getImplementationForStatement (statement: Node): ImplementationLocation[];
 	getImportedFilesForFile (filename: string): ITypescriptLanguageServiceImportPath[];
-	getImportedFilesForStatementFile (statement: Statement|Expression|Node): ITypescriptLanguageServiceImportPath[];
+	getImportedFilesForStatementFile (statement: Node): ITypescriptLanguageServiceImportPath[];
 	getImportedFilesForContent (content: string, from: string): ITypescriptLanguageServiceImportPath[];
 }
 
