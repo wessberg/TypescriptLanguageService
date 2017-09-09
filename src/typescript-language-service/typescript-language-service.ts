@@ -13,6 +13,7 @@ import {ITypescriptLanguageServiceAddPath} from "./i-typescript-language-service
 import {ITypescriptLanguageServicePathInfo} from "./i-typescript-language-service-path-info";
 import {isTypescriptLanguageServicePathInfo} from "./is-typescript-language-service-path-info";
 import {ITypescriptLanguageServiceAddImportedFiles} from "./i-typescript-language-service-add-imported-files";
+import {ITypescriptLanguageServiceImportPath} from "./i-typescript-language-service-import-path";
 
 /**
  * A host-implementation of Typescripts LanguageService.
@@ -169,7 +170,7 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 
 			// Recursively add all missing imports to the LanguageService if 'addImportedFiles' is truthy.
 			if (addImportedFiles) this.getImportedFilesForFile(resolvedPath).forEach(importedFile => {
-				if (!this.isExcluded(importedFile)) this.addFile({path: importedFile, from: resolvedPath, addImportedFiles});
+				if (!this.isExcluded(importedFile.normalizedPath)) this.addFile({path: importedFile.normalizedPath, from: resolvedPath, addImportedFiles});
 			});
 		}
 
@@ -380,9 +381,9 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	/**
 	 * Gets all imported files for the given file
 	 * @param {string} filename
-	 * @returns {string[]}
+	 * @returns {ITypescriptLanguageServiceImportPath[]}
 	 */
-	public getImportedFilesForFile (filename: string): string[] {
+	public getImportedFilesForFile (filename: string): ITypescriptLanguageServiceImportPath[] {
 		const {content} = this.getFileContent(filename);
 		return this.getImportedFilesForContent(content, filename);
 	}
@@ -390,9 +391,9 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	/**
 	 * Gets all imported files for the file that has the provided Statement.
 	 * @param {Statement | Expression | Node} statement
-	 * @returns {string[]}
+	 * @returns {ITypescriptLanguageServiceImportPath[]}
 	 */
-	public getImportedFilesForStatementFile (statement: Statement|Expression|Node): string[] {
+	public getImportedFilesForStatementFile (statement: Statement|Expression|Node): ITypescriptLanguageServiceImportPath[] {
 		return this.getImportedFilesForFile(statement.getSourceFile().fileName);
 	}
 
@@ -400,14 +401,21 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	 * Gets all imported files for the given content
 	 * @param {string} content
 	 * @param {string} from
-	 * @returns {string[]}
+	 * @returns {ITypescriptLanguageServiceImportPath[]}
 	 */
-	public getImportedFilesForContent (content: string, from: string): string[] {
+	public getImportedFilesForContent (content: string, from: string): ITypescriptLanguageServiceImportPath[] {
 		return preProcessFile(content, true, true).importedFiles
 			// Remove all native built-in modules and non-existing files.
 			.filter(file => file.fileName != null && file.fileName.length > 0 && !this.moduleUtil.builtInModules.has(file.fileName))
 			// Take file names.
-			.map(importedFile => this.getAddPath(importedFile.fileName, from).normalizedPath);
+			.map(importedFile => {
+				const {normalizedPath, resolvedPath} = this.getAddPath(importedFile.fileName, from);
+				return {
+					normalizedPath,
+					resolvedPath,
+					rawPath: importedFile.fileName
+				};
+			});
 	}
 
 	/**

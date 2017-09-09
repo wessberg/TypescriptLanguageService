@@ -8,6 +8,7 @@ import {ITypescriptLanguageServiceContent} from "./i-typescript-language-service
 import {ITypescriptLanguageServiceAddPath} from "./i-typescript-language-service-add-path";
 import {ITypescriptLanguageServicePathInfo} from "./i-typescript-language-service-path-info";
 import {ITypescriptLanguageServiceAddImportedFiles} from "./i-typescript-language-service-add-imported-files";
+import {ITypescriptLanguageServiceImportPath} from "./i-typescript-language-service-import-path";
 
 export interface ITypescriptLanguageService extends LanguageServiceHost {
 	excludeFiles (match: RegExp|Iterable<RegExp>): void;
@@ -26,9 +27,9 @@ export interface ITypescriptLanguageService extends LanguageServiceHost {
 	findReferencesForStatement (statement: Statement|Expression|Node): ReferencedSymbol[];
 	getImplementationAtPosition (filename: string, position: number): ImplementationLocation[];
 	getImplementationForStatement (statement: Statement|Expression|Node): ImplementationLocation[];
-	getImportedFilesForFile (filename: string): string[];
-	getImportedFilesForStatementFile (statement: Statement|Expression|Node): string[];
-	getImportedFilesForContent (content: string, from: string): string[];
+	getImportedFilesForFile (filename: string): ITypescriptLanguageServiceImportPath[];
+	getImportedFilesForStatementFile (statement: Statement|Expression|Node): ITypescriptLanguageServiceImportPath[];
+	getImportedFilesForContent (content: string, from: string): ITypescriptLanguageServiceImportPath[];
 }
 
 export interface ITypescriptLanguageServiceConstructor {
