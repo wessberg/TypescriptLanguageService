@@ -76,6 +76,14 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 		else [...match].forEach(regExpItem => this.excludedFiles.add(regExpItem));
 	}
 
+	private loadContent ({isTemporary, resolvedPath, normalizedPath}: ITypescriptLanguageServiceAddPath): string {
+		// First, check if we have the content locally so we don't have to perform I/O
+		const {content} = this.getFileContent(normalizedPath);
+		// If we have content already, return it.
+		if (content != null && content.length > 0) return content;
+		return this.fileLoader.loadSync(isTemporary ? this.clearTemporaryDeclarationAddition(resolvedPath) : resolvedPath).toString();
+	}
+
 	/**
 	 * Gets relevant path info
 	 * @param {(ITypescriptLanguageServiceGetPathInfoOptions & {content?: string}) | (ITypescriptLanguageServiceAddPath & {content?: string})} options
@@ -83,10 +91,10 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	 */
 	public getPathInfo (options: (ITypescriptLanguageServiceGetPathInfoOptions & {content?: string})|(ITypescriptLanguageServiceAddPath & {content?: string})): ITypescriptLanguageServicePathInfo {
 		const addPath = isTypescriptLanguageServiceAddPath(options) ? options : this.getAddPath(options.path, options.from);
+		// Load the contents from the absolute path unless content was given as an argument
+		let actualContent = options.content == null ? this.loadContent(addPath) : options.content;
 		const {isTemporary, resolvedPath, normalizedPath} = addPath;
 
-		// Load the contents from the absolute path unless content was given as an argument
-		let actualContent = options.content == null ? this.fileLoader.loadSync(isTemporary ? this.clearTemporaryDeclarationAddition(resolvedPath) : resolvedPath).toString() : options.content;
 		// Make a copy of the actual content
 		const rawContent = actualContent;
 
