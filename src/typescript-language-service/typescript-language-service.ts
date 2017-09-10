@@ -471,6 +471,9 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 		this.removeFile(normalizedDeclarationPath);
 
 		const {content} = this.reassembler.reassemble({compiledStatements, declarationStatements});
+
+		// Re-associate the path with the updated content
+		this.files.set(normalizedPath, {version: 0, content: content, rawContent: normalizedContent});
 		return content;
 	}
 
