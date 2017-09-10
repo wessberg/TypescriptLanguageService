@@ -76,6 +76,13 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 		else [...match].forEach(regExpItem => this.excludedFiles.add(regExpItem));
 	}
 
+	/**
+	 * Loads the file contents from the provided addPath
+	 * @param {boolean} isTemporary
+	 * @param {string} resolvedPath
+	 * @param {string} normalizedPath
+	 * @returns {string}
+	 */
 	private loadContent ({isTemporary, resolvedPath, normalizedPath}: ITypescriptLanguageServiceAddPath): string {
 		// First, check if we have the content locally so we don't have to perform I/O
 		const {content} = this.getFileContent(normalizedPath);
