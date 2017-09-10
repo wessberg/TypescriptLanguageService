@@ -14,6 +14,8 @@ import {ITypescriptLanguageServicePathInfo} from "./i-typescript-language-servic
 import {isTypescriptLanguageServicePathInfo} from "./is-typescript-language-service-path-info";
 import {ITypescriptLanguageServiceAddImportedFiles} from "./i-typescript-language-service-add-imported-files";
 import {ITypescriptLanguageServiceImportPath} from "./i-typescript-language-service-import-path";
+import {ITypescriptLanguageServiceGetPathInfoOptions} from "./i-typescript-language-service-get-path-info-options";
+import {isTypescriptLanguageServiceAddPath} from "./is-typescript-language-service-add-path";
 
 /**
  * A host-implementation of Typescripts LanguageService.
@@ -76,16 +78,15 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 
 	/**
 	 * Gets relevant path info
-	 * @param {string} path
-	 * @param {string} from
-	 * @param {string} content
+	 * @param {(ITypescriptLanguageServiceGetPathInfoOptions & {content?: string}) | (ITypescriptLanguageServiceAddPath & {content?: string})} options
 	 * @returns {ITypescriptLanguageServicePathInfo}
 	 */
-	public getPathInfo (path: string, from = process.cwd(), content?: string): ITypescriptLanguageServicePathInfo {
-		const {isTemporary, resolvedPath, normalizedPath} = this.getAddPath(path, from);
+	public getPathInfo (options: (ITypescriptLanguageServiceGetPathInfoOptions & {content?: string})|(ITypescriptLanguageServiceAddPath & {content?: string})): ITypescriptLanguageServicePathInfo {
+		const addPath = isTypescriptLanguageServiceAddPath(options) ? options : this.getAddPath(options.path, options.from);
+		const {isTemporary, resolvedPath, normalizedPath} = addPath;
 
 		// Load the contents from the absolute path unless content was given as an argument
-		let actualContent = content == null ? this.fileLoader.loadSync(isTemporary ? this.clearTemporaryDeclarationAddition(resolvedPath) : resolvedPath).toString() : content;
+		let actualContent = options.content == null ? this.fileLoader.loadSync(isTemporary ? this.clearTemporaryDeclarationAddition(resolvedPath) : resolvedPath).toString() : options.content;
 		// Make a copy of the actual content
 		const rawContent = actualContent;
 
@@ -155,7 +156,7 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	 * @returns {NodeArray<Statement>}
 	 */
 	public addFile (options: (ITypescriptLanguageServiceAddFileOptions&ITypescriptLanguageServiceAddImportedFiles)|(ITypescriptLanguageServicePathInfo&ITypescriptLanguageServiceAddImportedFiles)): NodeArray<Statement> {
-		const pathInfo: ITypescriptLanguageServicePathInfo = isTypescriptLanguageServicePathInfo(options) ? options : this.getPathInfo(options.path, options.from == null ? process.cwd() : options.from, options.content);
+		const pathInfo: ITypescriptLanguageServicePathInfo = isTypescriptLanguageServicePathInfo(options) ? options : this.getPathInfo({path: options.path, from: options.from == null ? process.cwd() : options.from, content: options.content});
 		const {resolvedPath, normalizedPath, needsUpdate, rawContent, content: actualContent} = pathInfo;
 		const addImportedFiles = options.addImportedFiles == null ? false : options.addImportedFiles;
 

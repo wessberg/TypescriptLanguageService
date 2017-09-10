@@ -4,6 +4,12 @@ import {ModuleUtil} from "@wessberg/moduleutil";
 import {FileLoader} from "@wessberg/fileloader";
 import {PathUtil} from "@wessberg/pathutil";
 import {TypescriptPackageReassembler} from "@wessberg/typescript-package-reassembler";
+import {createSourceFile, ScriptTarget} from "typescript";
+
+const file = createSourceFile("foo.ts", `export * from "foo`, ScriptTarget.ES2017);
+file.statements.forEach(statement => {
+	console.log(statement);
+});
 
 const fileLoader = new FileLoader();
 const pathUtil = new PathUtil(fileLoader);
