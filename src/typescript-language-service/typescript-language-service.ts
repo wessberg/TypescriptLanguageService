@@ -1,4 +1,4 @@
-import {CompilerOptions, createDocumentRegistry, createLanguageService, createNodeArray, DefinitionInfo, QuickInfo, getDefaultLibFilePath, ImplementationLocation, IScriptSnapshot, LanguageService, ModuleKind, Node, NodeArray, preProcessFile, ReferencedSymbol, ScriptSnapshot, ScriptTarget, Statement} from "typescript";
+import {CompilerOptions, createDocumentRegistry, createLanguageService, DefinitionInfo, getDefaultLibFilePath, ImplementationLocation, IScriptSnapshot, LanguageService, ModuleKind, Node, preProcessFile, QuickInfo, ReferencedSymbol, ScriptSnapshot, ScriptTarget, SourceFile} from "typescript";
 import {ITypescriptLanguageService} from "./i-typescript-language-service";
 import {IModuleUtil} from "@wessberg/moduleutil";
 import {IFileLoader} from "@wessberg/fileloader";
@@ -77,26 +77,11 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	}
 
 	/**
-	 * Loads the file contents from the provided addPath
-	 * @param {boolean} isTemporary
-	 * @param {string} resolvedPath
-	 * @param {string} normalizedPath
-	 * @returns {string}
-	 */
-	private loadContent ({isTemporary, resolvedPath, normalizedPath}: ITypescriptLanguageServiceAddPath): string {
-		// First, check if we have the content locally so we don't have to perform I/O
-		const {content} = this.getFileContent(normalizedPath);
-		// If we have content already, return it.
-		if (content != null && content.length > 0) return content;
-		return this.fileLoader.loadSync(isTemporary ? this.clearTemporaryDeclarationAddition(resolvedPath) : resolvedPath).toString();
-	}
-
-	/**
 	 * Gets relevant path info
 	 * @param {(ITypescriptLanguageServiceGetPathInfoOptions & {content?: string}) | (ITypescriptLanguageServiceAddPath & {content?: string})} options
 	 * @returns {ITypescriptLanguageServicePathInfo}
 	 */
-	public getPathInfo (options: (ITypescriptLanguageServiceGetPathInfoOptions & {content?: string})|(ITypescriptLanguageServiceAddPath & {content?: string})): ITypescriptLanguageServicePathInfo {
+	public getPathInfo (options: (ITypescriptLanguageServiceGetPathInfoOptions&{ content?: string })|(ITypescriptLanguageServiceAddPath&{ content?: string })): ITypescriptLanguageServicePathInfo {
 		const addPath = isTypescriptLanguageServiceAddPath(options) ? options : this.getAddPath(options.path, options.from);
 		// Load the contents from the absolute path unless content was given as an argument
 		let actualContent = options.content == null ? this.loadContent(addPath) : options.content;
@@ -168,9 +153,9 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	/**
 	 * Adds a new file to the TypescriptLanguageService.
 	 * @param {ITypescriptLanguageServiceAddFileOptions & ITypescriptLanguageServiceAddImportedFiles | ITypescriptLanguageServicePathInfo & ITypescriptLanguageServiceAddImportedFiles} options
-	 * @returns {NodeArray<Statement>}
+	 * @returns {SourceFile}
 	 */
-	public addFile (options: (ITypescriptLanguageServiceAddFileOptions&ITypescriptLanguageServiceAddImportedFiles)|(ITypescriptLanguageServicePathInfo&ITypescriptLanguageServiceAddImportedFiles)): NodeArray<Statement> {
+	public addFile (options: (ITypescriptLanguageServiceAddFileOptions&ITypescriptLanguageServiceAddImportedFiles)|(ITypescriptLanguageServicePathInfo&ITypescriptLanguageServiceAddImportedFiles)): SourceFile {
 		const pathInfo: ITypescriptLanguageServicePathInfo = isTypescriptLanguageServicePathInfo(options) ? options : this.getPathInfo({path: options.path, from: options.from == null ? process.cwd() : options.from, content: options.content});
 		const {resolvedPath, normalizedPath, needsUpdate, rawContent, content: actualContent} = pathInfo;
 		const addImportedFiles = options.addImportedFiles == null ? false : options.addImportedFiles;
@@ -191,20 +176,20 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 		}
 
 		// Retrieve the Statements of the file
-		return this.getFile(options);
+		return this.getFile(options)!;
 	}
 
 	/**
 	 * Gets the Statements associated with the given filename.
 	 * @param {ITypescriptLanguageServiceGetFileOptions | ITypescriptLanguageServicePathInfo} options
-	 * @returns {NodeArray<Statement>}
+	 * @returns {SourceFile?}
 	 */
-	public getFile (options: ITypescriptLanguageServiceGetFileOptions|ITypescriptLanguageServicePathInfo): NodeArray<Statement> {
+	public getFile (options: ITypescriptLanguageServiceGetFileOptions|ITypescriptLanguageServicePathInfo): SourceFile|undefined {
 		// Resolve the absolute, fully qualified path
 		const {normalizedPath} = isTypescriptLanguageServicePathInfo(options) ? options : this.getAddPath(options.path, options.from == null ? process.cwd() : options.from);
 		const file = this.languageService.getProgram().getSourceFile(normalizedPath);
-		if (file == null) return createNodeArray();
-		return file == null ? createNodeArray() : file.statements;
+		if (file == null) return undefined;
+		return file;
 	}
 
 	/**
@@ -457,6 +442,21 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	}
 
 	/**
+	 * Loads the file contents from the provided addPath
+	 * @param {boolean} isTemporary
+	 * @param {string} resolvedPath
+	 * @param {string} normalizedPath
+	 * @returns {string}
+	 */
+	private loadContent ({isTemporary, resolvedPath, normalizedPath}: ITypescriptLanguageServiceAddPath): string {
+		// First, check if we have the content locally so we don't have to perform I/O
+		const {content} = this.getFileContent(normalizedPath);
+		// If we have content already, return it.
+		if (content != null && content.length > 0) return content;
+		return this.fileLoader.loadSync(isTemporary ? this.clearTemporaryDeclarationAddition(resolvedPath) : resolvedPath).toString();
+	}
+
+	/**
 	 * Returns true if the given filepath should be excluded
 	 * @param {string} filepath
 	 * @returns {boolean}
@@ -479,8 +479,8 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 		// Temporarily add the files
 		this.files.set(normalizedPath, {version: 0, content: normalizedContent, rawContent: normalizedContent});
 		this.addFile({path: normalizedDeclarationPath});
-		const compiledStatements = this.getFile({path: normalizedPath});
-		const declarationStatements = this.getFile({path: normalizedDeclarationPath});
+		const compiledStatements = this.getFile({path: normalizedPath})!.statements;
+		const declarationStatements = this.getFile({path: normalizedDeclarationPath})!.statements;
 		// Remove the files now
 		this.removeFile(normalizedPath);
 		this.removeFile(normalizedDeclarationPath);

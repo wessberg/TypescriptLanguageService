@@ -1,4 +1,4 @@
-import {DefinitionInfo, ImplementationLocation, LanguageServiceHost, QuickInfo, Node, NodeArray, ReferencedSymbol, Statement} from "typescript";
+import {DefinitionInfo, ImplementationLocation, LanguageServiceHost, Node, QuickInfo, ReferencedSymbol, SourceFile} from "typescript";
 import {ITypescriptLanguageServiceAddFileOptions} from "./i-typescript-language-service-add-file-options";
 import {ITypescriptLanguageServiceGetFileOptions} from "./i-typescript-language-service-get-file-options";
 import {IModuleUtil} from "@wessberg/moduleutil";
@@ -13,10 +13,10 @@ import {ITypescriptLanguageServiceGetPathInfoOptions} from "./i-typescript-langu
 
 export interface ITypescriptLanguageService extends LanguageServiceHost {
 	excludeFiles (match: RegExp|Iterable<RegExp>): void;
-	getPathInfo (options: (ITypescriptLanguageServiceGetPathInfoOptions & {content?: string})|(ITypescriptLanguageServiceAddPath & {content?: string})): ITypescriptLanguageServicePathInfo;
+	getPathInfo (options: (ITypescriptLanguageServiceGetPathInfoOptions&{ content?: string })|(ITypescriptLanguageServiceAddPath&{ content?: string })): ITypescriptLanguageServicePathInfo;
 	getAddPath (path: string, from?: string): ITypescriptLanguageServiceAddPath;
-	addFile (options: (ITypescriptLanguageServiceAddFileOptions&ITypescriptLanguageServiceAddImportedFiles)|(ITypescriptLanguageServicePathInfo&ITypescriptLanguageServiceAddImportedFiles)): NodeArray<Statement>;
-	getFile (options: ITypescriptLanguageServiceGetFileOptions|ITypescriptLanguageServicePathInfo): NodeArray<Statement>;
+	addFile (options: (ITypescriptLanguageServiceAddFileOptions&ITypescriptLanguageServiceAddImportedFiles)|(ITypescriptLanguageServicePathInfo&ITypescriptLanguageServiceAddImportedFiles)): SourceFile;
+	getFile (options: ITypescriptLanguageServiceGetFileOptions|ITypescriptLanguageServicePathInfo): SourceFile|undefined;
 	removeFile (fileName: string): void;
 	getFileVersion (filePath: string): number;
 	getFileContent (fileName: string, isTemporary?: boolean): ITypescriptLanguageServiceContent;
