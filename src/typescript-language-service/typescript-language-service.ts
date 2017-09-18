@@ -34,6 +34,15 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	 */
 	private static readonly RESOLVED_PATH_MAP: Map<string, ITypescriptLanguageServiceAddPath> = new Map();
 	/**
+	 * The default compiler options to use
+	 * @type {CompilerOptions}
+	 */
+	private static readonly DEFAULT_COMPILER_OPTIONS: CompilerOptions = {
+		target: ScriptTarget.ES2017,
+		module: ModuleKind.ESNext,
+		lib: ["es2015.promise", "dom", "es6", "scripthost", "es7", "es2017.object", "es2015.proxy"]
+	};
+	/**
 	 * The Set of all Regular Expressions for matching files to be excluded
 	 * @type {Set<RegExp>}
 	 */
@@ -48,15 +57,17 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	 * @type {LanguageService}
 	 */
 	private languageService: LanguageService = createLanguageService(this, createDocumentRegistry());
+	/**
+	 * The actual CompilerOptions to use
+	 * @type {CompilerOptions}
+	 */
+	private compilerOptions: CompilerOptions = TypescriptLanguageService.DEFAULT_COMPILER_OPTIONS;
 
 	constructor (private moduleUtil: IModuleUtil,
 							 private pathUtil: IPathUtil,
 							 private fileLoader: IFileLoader,
-							 private reassembler: ITypescriptPackageReassembler,
-							 options?: Partial<ITypescriptLanguageServiceOptions>) {
-		if (options != null && options.excludedFiles != null) {
-			this.excludeFiles(options.excludedFiles);
-		}
+							 private reassembler: ITypescriptPackageReassembler) {
+		this.setOptions();
 	}
 
 	/**
@@ -65,6 +76,31 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	 */
 	private get temporaryDeclarationAddition (): string {
 		return `${TypescriptLanguageService.DECLARATION_TEMPORARY_SUFFIX}.ts`;
+	}
+
+	/**
+	 * Sets options for the TypescriptLanguageService
+	 * @param {Partial<ITypescriptLanguageServiceOptions>} options
+	 */
+	public setOptions (options?: Partial<ITypescriptLanguageServiceOptions>): void {
+		if (options == null) return;
+		const {excludedFiles, compilerOptions} = options;
+
+		if (excludedFiles != null) {
+			this.excludeFiles(excludedFiles);
+		}
+
+		if (compilerOptions != null) {
+			this.setCompilerOptions(compilerOptions);
+		}
+	}
+
+	/**
+	 * Sets the compiler options to use
+	 * @param {CompilerOptions} options
+	 */
+	private setCompilerOptions (options: CompilerOptions): void {
+		this.compilerOptions = options;
 	}
 
 	/**
@@ -204,16 +240,11 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	}
 
 	/**
-	 * Gets the settings that Typescript will generate an AST from. There isn't much reason to make
-	 * anything but the libs developer-facing since we only support ES2015 (and newer) modules.
+	 * Gets the settings that Typescript will generate an AST from.
 	 * @returns {CompilerOptions}
 	 */
 	public getCompilationSettings (): CompilerOptions {
-		return {
-			target: ScriptTarget.ES2017,
-			module: ModuleKind.ESNext,
-			lib: ["es2015.promise", "dom", "es6", "scripthost", "es7", "es2017.object", "es2015.proxy"]
-		};
+		return this.compilerOptions;
 	}
 
 	/**

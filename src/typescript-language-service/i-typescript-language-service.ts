@@ -10,8 +10,10 @@ import {ITypescriptLanguageServicePathInfo} from "./i-typescript-language-servic
 import {ITypescriptLanguageServiceAddImportedFiles} from "./i-typescript-language-service-add-imported-files";
 import {ITypescriptLanguageServiceImportPath} from "./i-typescript-language-service-import-path";
 import {ITypescriptLanguageServiceGetPathInfoOptions} from "./i-typescript-language-service-get-path-info-options";
+import {ITypescriptLanguageServiceOptions} from "./i-typescript-language-service-options";
 
 export interface ITypescriptLanguageService extends LanguageServiceHost {
+	setOptions (options?: Partial<ITypescriptLanguageServiceOptions>): void;
 	excludeFiles (match: RegExp|Iterable<RegExp>): void;
 	getPathInfo (options: (ITypescriptLanguageServiceGetPathInfoOptions&{ content?: string })|(ITypescriptLanguageServiceAddPath&{ content?: string })): ITypescriptLanguageServicePathInfo;
 	getAddPath (path: string, from?: string): ITypescriptLanguageServiceAddPath;
