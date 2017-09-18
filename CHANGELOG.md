@@ -1,3 +1,12 @@
+<a name="0.0.29"></a>
+## 0.0.29 (2017-09-18)
+
+* 0.0.29 ([6d5493d](https://github.com/wessberg/TypescriptLanguageService/commit/6d5493d))
+* Bumped version ([097758d](https://github.com/wessberg/TypescriptLanguageService/commit/097758d))
+* Removed constructor arguments to allow for the TypescriptLanguageService to be dependency-injected ([c83bd44](https://github.com/wessberg/TypescriptLanguageService/commit/c83bd44))
+
+
+
 <a name="0.0.28"></a>
 ## 0.0.28 (2017-09-18)
 
