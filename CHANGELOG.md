@@ -1,3 +1,12 @@
+<a name="0.0.28"></a>
+## 0.0.28 (2017-09-18)
+
+* 0.0.28 ([da09c2b](https://github.com/wessberg/TypescriptLanguageService/commit/da09c2b))
+* Bumped version ([f029d8f](https://github.com/wessberg/TypescriptLanguageService/commit/f029d8f))
+* Made 'addFile' and 'getFile' return a SourceFile rather than statements ([9e02547](https://github.com/wessberg/TypescriptLanguageService/commit/9e02547))
+
+
+
 <a name="0.0.27"></a>
 ## 0.0.27 (2017-09-10)
 
