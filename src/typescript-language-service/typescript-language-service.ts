@@ -212,19 +212,23 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 		}
 
 		// Retrieve the Statements of the file
-		return this.getFile(options)!;
+		return this.languageService.getProgram().getSourceFile(normalizedPath);
 	}
 
 	/**
 	 * Gets the Statements associated with the given filename.
 	 * @param {ITypescriptLanguageServiceGetFileOptions | ITypescriptLanguageServicePathInfo} options
-	 * @returns {SourceFile?}
+	 * @returns {SourceFile}
 	 */
-	public getFile (options: ITypescriptLanguageServiceGetFileOptions|ITypescriptLanguageServicePathInfo): SourceFile|undefined {
+	public getFile (options: ITypescriptLanguageServiceGetFileOptions|ITypescriptLanguageServicePathInfo): SourceFile {
 		// Resolve the absolute, fully qualified path
 		const {normalizedPath} = isTypescriptLanguageServicePathInfo(options) ? options : this.getAddPath(options.path, options.from == null ? process.cwd() : options.from);
 		const file = this.languageService.getProgram().getSourceFile(normalizedPath);
-		if (file == null) return undefined;
+
+		// If the file is not defined, add it
+		if (file == null) {
+			return this.addFile(options);
+		}
 		return file;
 	}
 
