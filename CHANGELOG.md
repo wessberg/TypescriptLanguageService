@@ -1,3 +1,12 @@
+<a name="0.0.30"></a>
+## 0.0.30 (2017-10-16)
+
+* 0.0.30 ([7ca9948](https://github.com/wessberg/TypescriptLanguageService/commit/7ca9948))
+* Bumped version ([f387441](https://github.com/wessberg/TypescriptLanguageService/commit/f387441))
+* Made 'getFile' add the file if it hasn't been parsed already ([7f3c44f](https://github.com/wessberg/TypescriptLanguageService/commit/7f3c44f))
+
+
+
 <a name="0.0.29"></a>
 ## 0.0.29 (2017-09-18)
 
