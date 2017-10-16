@@ -514,8 +514,8 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 		// Temporarily add the files
 		this.files.set(normalizedPath, {version: 0, content: normalizedContent, rawContent: normalizedContent});
 		this.addFile({path: normalizedDeclarationPath});
-		const compiledStatements = this.getFile({path: normalizedPath})!.statements;
-		const declarationStatements = this.getFile({path: normalizedDeclarationPath})!.statements;
+		const compiledStatements = this.getFile({path: normalizedPath}).statements;
+		const declarationStatements = this.getFile({path: normalizedDeclarationPath}).statements;
 		// Remove the files now
 		this.removeFile(normalizedPath);
 		this.removeFile(normalizedDeclarationPath);
