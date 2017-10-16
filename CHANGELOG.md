@@ -1,3 +1,12 @@
+<a name="0.0.31"></a>
+## 0.0.31 (2017-10-16)
+
+* 0.0.31 ([4e91514](https://github.com/wessberg/TypescriptLanguageService/commit/4e91514))
+* Bumped version ([0f4d671](https://github.com/wessberg/TypescriptLanguageService/commit/0f4d671))
+* Removed unneccesary assertions ([7e5c566](https://github.com/wessberg/TypescriptLanguageService/commit/7e5c566))
+
+
+
 <a name="0.0.30"></a>
 ## 0.0.30 (2017-10-16)
 
