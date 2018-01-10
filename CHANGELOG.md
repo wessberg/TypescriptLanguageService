@@ -1,3 +1,12 @@
+<a name="0.0.33"></a>
+## 0.0.33 (2018-01-10)
+
+* 0.0.33 ([671265c](https://github.com/wessberg/TypescriptLanguageService/commit/671265c))
+* Bumped version ([aacb596](https://github.com/wessberg/TypescriptLanguageService/commit/aacb596))
+* Changed signature of 'getFile' such that it supports taking in some content to check if a new Source ([1722d98](https://github.com/wessberg/TypescriptLanguageService/commit/1722d98))
+
+
+
 <a name="0.0.32"></a>
 ## 0.0.32 (2017-11-02)
 
