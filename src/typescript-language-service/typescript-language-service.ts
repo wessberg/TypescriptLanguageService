@@ -3,7 +3,6 @@ import {ITypescriptLanguageService} from "./i-typescript-language-service";
 import {IModuleUtil} from "@wessberg/moduleutil";
 import {IFileLoader} from "@wessberg/fileloader";
 import {ITypescriptLanguageServiceAddFileOptions} from "./i-typescript-language-service-add-file-options";
-import {ITypescriptLanguageServiceGetFileOptions} from "./i-typescript-language-service-get-file-options";
 import {IPathUtil} from "@wessberg/pathutil";
 import {ITypescriptLanguageServiceOptions} from "./i-typescript-language-service-options";
 import {ITypescriptPackageReassembler} from "@wessberg/typescript-package-reassembler";
@@ -16,6 +15,7 @@ import {ITypescriptLanguageServiceAddImportedFiles} from "./i-typescript-languag
 import {ITypescriptLanguageServiceImportPath} from "./i-typescript-language-service-import-path";
 import {ITypescriptLanguageServiceGetPathInfoOptions} from "./i-typescript-language-service-get-path-info-options";
 import {isTypescriptLanguageServiceAddPath} from "./is-typescript-language-service-add-path";
+import {IGetFileOptions} from "./i-get-file-options";
 
 /**
  * A host-implementation of Typescripts LanguageService.
@@ -93,14 +93,6 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 		if (compilerOptions != null) {
 			this.setCompilerOptions(compilerOptions);
 		}
-	}
-
-	/**
-	 * Sets the compiler options to use
-	 * @param {CompilerOptions} options
-	 */
-	private setCompilerOptions (options: CompilerOptions): void {
-		this.compilerOptions = options;
 	}
 
 	/**
@@ -217,17 +209,17 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 
 	/**
 	 * Gets the Statements associated with the given filename.
-	 * @param {ITypescriptLanguageServiceGetFileOptions | ITypescriptLanguageServicePathInfo} options
+	 * @param {IGetFileOptions} options
 	 * @returns {SourceFile}
 	 */
-	public getFile (options: ITypescriptLanguageServiceGetFileOptions|ITypescriptLanguageServicePathInfo): SourceFile {
+	public getFile ({path, content, from}: IGetFileOptions): SourceFile {
 		// Resolve the absolute, fully qualified path
-		const {normalizedPath} = isTypescriptLanguageServicePathInfo(options) ? options : this.getAddPath(options.path, options.from == null ? process.cwd() : options.from);
-		const file = this.languageService.getProgram().getSourceFile(normalizedPath);
+		const pathInfo = this.getPathInfo({path, content, from: from == null ? process.cwd() : from});
+		const file = this.languageService.getProgram().getSourceFile(pathInfo.normalizedPath);
 
 		// If the file is not defined, add it
-		if (file == null) {
-			return this.addFile(options);
+		if (file == null || pathInfo.needsUpdate) {
+			return this.addFile(pathInfo);
 		}
 		return file;
 	}
@@ -474,6 +466,14 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 					rawPath: importedFile.fileName
 				};
 			});
+	}
+
+	/**
+	 * Sets the compiler options to use
+	 * @param {CompilerOptions} options
+	 */
+	private setCompilerOptions (options: CompilerOptions): void {
+		this.compilerOptions = options;
 	}
 
 	/**

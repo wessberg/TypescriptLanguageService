@@ -1,6 +1,5 @@
 import {DefinitionInfo, ImplementationLocation, LanguageServiceHost, Node, QuickInfo, ReferencedSymbol, SourceFile} from "typescript";
 import {ITypescriptLanguageServiceAddFileOptions} from "./i-typescript-language-service-add-file-options";
-import {ITypescriptLanguageServiceGetFileOptions} from "./i-typescript-language-service-get-file-options";
 import {IModuleUtil} from "@wessberg/moduleutil";
 import {IPathUtil} from "@wessberg/pathutil";
 import {IFileLoader} from "@wessberg/fileloader";
@@ -11,6 +10,7 @@ import {ITypescriptLanguageServiceAddImportedFiles} from "./i-typescript-languag
 import {ITypescriptLanguageServiceImportPath} from "./i-typescript-language-service-import-path";
 import {ITypescriptLanguageServiceGetPathInfoOptions} from "./i-typescript-language-service-get-path-info-options";
 import {ITypescriptLanguageServiceOptions} from "./i-typescript-language-service-options";
+import {IGetFileOptions} from "./i-get-file-options";
 
 export interface ITypescriptLanguageService extends LanguageServiceHost {
 	setOptions (options?: Partial<ITypescriptLanguageServiceOptions>): void;
@@ -18,7 +18,7 @@ export interface ITypescriptLanguageService extends LanguageServiceHost {
 	getPathInfo (options: (ITypescriptLanguageServiceGetPathInfoOptions&{ content?: string })|(ITypescriptLanguageServiceAddPath&{ content?: string })): ITypescriptLanguageServicePathInfo;
 	getAddPath (path: string, from?: string): ITypescriptLanguageServiceAddPath;
 	addFile (options: (ITypescriptLanguageServiceAddFileOptions&ITypescriptLanguageServiceAddImportedFiles)|(ITypescriptLanguageServicePathInfo&ITypescriptLanguageServiceAddImportedFiles)): SourceFile;
-	getFile (options: ITypescriptLanguageServiceGetFileOptions|ITypescriptLanguageServicePathInfo): SourceFile;
+	getFile (options: IGetFileOptions): SourceFile;
 	removeFile (fileName: string): void;
 	getFileVersion (filePath: string): number;
 	getFileContent (fileName: string, isTemporary?: boolean): ITypescriptLanguageServiceContent;
