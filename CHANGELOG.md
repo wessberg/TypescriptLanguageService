@@ -1,5 +1,14 @@
+<a name="0.0.35"></a>
+## <small>0.0.35 (2018-02-03)</small>
+
+* 0.0.35 ([01b738e](https://github.com/wessberg/TypescriptLanguageService/commit/01b738e))
+* Bumped deps ([1e98b87](https://github.com/wessberg/TypescriptLanguageService/commit/1e98b87))
+* Bumped version ([b3f2bb2](https://github.com/wessberg/TypescriptLanguageService/commit/b3f2bb2))
+
+
+
 <a name="0.0.34"></a>
-## 0.0.34 (2018-01-10)
+## <small>0.0.34 (2018-01-10)</small>
 
 * 0.0.34 ([6fd43f4](https://github.com/wessberg/TypescriptLanguageService/commit/6fd43f4))
 * Bumped version ([0057845](https://github.com/wessberg/TypescriptLanguageService/commit/0057845))
@@ -7,7 +16,7 @@
 
 
 <a name="0.0.33"></a>
-## 0.0.33 (2018-01-10)
+## <small>0.0.33 (2018-01-10)</small>
 
 * 0.0.33 ([671265c](https://github.com/wessberg/TypescriptLanguageService/commit/671265c))
 * Bumped version ([aacb596](https://github.com/wessberg/TypescriptLanguageService/commit/aacb596))
@@ -16,7 +25,7 @@
 
 
 <a name="0.0.32"></a>
-## 0.0.32 (2017-11-02)
+## <small>0.0.32 (2017-11-02)</small>
 
 * 0.0.32 ([965ba82](https://github.com/wessberg/TypescriptLanguageService/commit/965ba82))
 * Bumped deps. ([10c3683](https://github.com/wessberg/TypescriptLanguageService/commit/10c3683))
@@ -25,7 +34,7 @@
 
 
 <a name="0.0.31"></a>
-## 0.0.31 (2017-10-16)
+## <small>0.0.31 (2017-10-16)</small>
 
 * 0.0.31 ([4e91514](https://github.com/wessberg/TypescriptLanguageService/commit/4e91514))
 * Bumped version ([0f4d671](https://github.com/wessberg/TypescriptLanguageService/commit/0f4d671))
@@ -34,7 +43,7 @@
 
 
 <a name="0.0.30"></a>
-## 0.0.30 (2017-10-16)
+## <small>0.0.30 (2017-10-16)</small>
 
 * 0.0.30 ([7ca9948](https://github.com/wessberg/TypescriptLanguageService/commit/7ca9948))
 * Bumped version ([f387441](https://github.com/wessberg/TypescriptLanguageService/commit/f387441))
@@ -43,7 +52,7 @@
 
 
 <a name="0.0.29"></a>
-## 0.0.29 (2017-09-18)
+## <small>0.0.29 (2017-09-18)</small>
 
 * 0.0.29 ([6d5493d](https://github.com/wessberg/TypescriptLanguageService/commit/6d5493d))
 * Bumped version ([097758d](https://github.com/wessberg/TypescriptLanguageService/commit/097758d))
@@ -52,7 +61,7 @@
 
 
 <a name="0.0.28"></a>
-## 0.0.28 (2017-09-18)
+## <small>0.0.28 (2017-09-18)</small>
 
 * 0.0.28 ([da09c2b](https://github.com/wessberg/TypescriptLanguageService/commit/da09c2b))
 * Bumped version ([f029d8f](https://github.com/wessberg/TypescriptLanguageService/commit/f029d8f))
@@ -61,7 +70,7 @@
 
 
 <a name="0.0.27"></a>
-## 0.0.27 (2017-09-10)
+## <small>0.0.27 (2017-09-10)</small>
 
 * 0.0.27 ([0019007](https://github.com/wessberg/TypescriptLanguageService/commit/0019007))
 * Bumped version ([2b1c05d](https://github.com/wessberg/TypescriptLanguageService/commit/2b1c05d))
@@ -70,7 +79,7 @@
 
 
 <a name="0.0.26"></a>
-## 0.0.26 (2017-09-10)
+## <small>0.0.26 (2017-09-10)</small>
 
 * 0.0.26 ([b650bc2](https://github.com/wessberg/TypescriptLanguageService/commit/b650bc2))
 * Bumped version ([5c3cb25](https://github.com/wessberg/TypescriptLanguageService/commit/5c3cb25))
@@ -79,7 +88,7 @@
 
 
 <a name="0.0.25"></a>
-## 0.0.25 (2017-09-10)
+## <small>0.0.25 (2017-09-10)</small>
 
 * 0.0.25 ([cf24ef3](https://github.com/wessberg/TypescriptLanguageService/commit/cf24ef3))
 * Bumped version ([91f0caa](https://github.com/wessberg/TypescriptLanguageService/commit/91f0caa))
@@ -88,7 +97,7 @@
 
 
 <a name="0.0.24"></a>
-## 0.0.24 (2017-09-10)
+## <small>0.0.24 (2017-09-10)</small>
 
 * 0.0.24 ([36614ca](https://github.com/wessberg/TypescriptLanguageService/commit/36614ca))
 * Bumped dependencies ([eeef14e](https://github.com/wessberg/TypescriptLanguageService/commit/eeef14e))
@@ -97,7 +106,7 @@
 
 
 <a name="0.0.23"></a>
-## 0.0.23 (2017-09-10)
+## <small>0.0.23 (2017-09-10)</small>
 
 * 0.0.23 ([2bc1cca](https://github.com/wessberg/TypescriptLanguageService/commit/2bc1cca))
 * Bumped version ([cd28f6f](https://github.com/wessberg/TypescriptLanguageService/commit/cd28f6f))
@@ -106,7 +115,7 @@
 
 
 <a name="0.0.22"></a>
-## 0.0.22 (2017-09-09)
+## <small>0.0.22 (2017-09-09)</small>
 
 * 0.0.22 ([60dddfb](https://github.com/wessberg/TypescriptLanguageService/commit/60dddfb))
 * Added 'getQuickInfo' methods ([4ab8288](https://github.com/wessberg/TypescriptLanguageService/commit/4ab8288))
@@ -115,7 +124,7 @@
 
 
 <a name="0.0.21"></a>
-## 0.0.21 (2017-09-09)
+## <small>0.0.21 (2017-09-09)</small>
 
 * 0.0.21 ([410904f](https://github.com/wessberg/TypescriptLanguageService/commit/410904f))
 * Added interface as export ([021e67e](https://github.com/wessberg/TypescriptLanguageService/commit/021e67e))
@@ -124,7 +133,7 @@
 
 
 <a name="0.0.20"></a>
-## 0.0.20 (2017-09-09)
+## <small>0.0.20 (2017-09-09)</small>
 
 * 0.0.20 ([3787b1e](https://github.com/wessberg/TypescriptLanguageService/commit/3787b1e))
 * Added interface as export ([bf06b0d](https://github.com/wessberg/TypescriptLanguageService/commit/bf06b0d))
@@ -133,7 +142,7 @@
 
 
 <a name="0.0.19"></a>
-## 0.0.19 (2017-09-09)
+## <small>0.0.19 (2017-09-09)</small>
 
 * 0.0.19 ([a1a3eaa](https://github.com/wessberg/TypescriptLanguageService/commit/a1a3eaa))
 * Bumped version ([48ef017](https://github.com/wessberg/TypescriptLanguageService/commit/48ef017))
@@ -142,7 +151,7 @@
 
 
 <a name="0.0.18"></a>
-## 0.0.18 (2017-09-04)
+## <small>0.0.18 (2017-09-04)</small>
 
 * 0.0.18 ([a2ee352](https://github.com/wessberg/TypescriptLanguageService/commit/a2ee352))
 * Bumped deps ([f57eebe](https://github.com/wessberg/TypescriptLanguageService/commit/f57eebe))
@@ -151,7 +160,7 @@
 
 
 <a name="0.0.17"></a>
-## 0.0.17 (2017-09-04)
+## <small>0.0.17 (2017-09-04)</small>
 
 * 0.0.17 ([ab5dd39](https://github.com/wessberg/TypescriptLanguageService/commit/ab5dd39))
 * Bumped version ([2c25796](https://github.com/wessberg/TypescriptLanguageService/commit/2c25796))
@@ -160,7 +169,7 @@
 
 
 <a name="0.0.16"></a>
-## 0.0.16 (2017-09-04)
+## <small>0.0.16 (2017-09-04)</small>
 
 * 0.0.16 ([61a0be3](https://github.com/wessberg/TypescriptLanguageService/commit/61a0be3))
 * Bumped version ([9b73a9e](https://github.com/wessberg/TypescriptLanguageService/commit/9b73a9e))
@@ -169,7 +178,7 @@
 
 
 <a name="0.0.15"></a>
-## 0.0.15 (2017-09-04)
+## <small>0.0.15 (2017-09-04)</small>
 
 * 0.0.15 ([13d9323](https://github.com/wessberg/TypescriptLanguageService/commit/13d9323))
 * Bumped version ([1af077c](https://github.com/wessberg/TypescriptLanguageService/commit/1af077c))
@@ -178,7 +187,7 @@
 
 
 <a name="0.0.14"></a>
-## 0.0.14 (2017-09-04)
+## <small>0.0.14 (2017-09-04)</small>
 
 * 0.0.14 ([e062aa6](https://github.com/wessberg/TypescriptLanguageService/commit/e062aa6))
 * Bumped version ([3d5700b](https://github.com/wessberg/TypescriptLanguageService/commit/3d5700b))
@@ -187,7 +196,7 @@
 
 
 <a name="0.0.13"></a>
-## 0.0.13 (2017-09-04)
+## <small>0.0.13 (2017-09-04)</small>
 
 * 0.0.13 ([a517541](https://github.com/wessberg/TypescriptLanguageService/commit/a517541))
 * Added a 'getPathInfo' method ([10a58e8](https://github.com/wessberg/TypescriptLanguageService/commit/10a58e8))
@@ -196,7 +205,7 @@
 
 
 <a name="0.0.12"></a>
-## 0.0.12 (2017-09-04)
+## <small>0.0.12 (2017-09-04)</small>
 
 * 0.0.12 ([deb9708](https://github.com/wessberg/TypescriptLanguageService/commit/deb9708))
 * Bumped version ([1751dec](https://github.com/wessberg/TypescriptLanguageService/commit/1751dec))
@@ -205,7 +214,7 @@
 
 
 <a name="0.0.11"></a>
-## 0.0.11 (2017-09-03)
+## <small>0.0.11 (2017-09-03)</small>
 
 * 0.0.11 ([0b6d7da](https://github.com/wessberg/TypescriptLanguageService/commit/0b6d7da))
 * Added a 'getAddPath' method ([04c09cb](https://github.com/wessberg/TypescriptLanguageService/commit/04c09cb))
@@ -214,7 +223,7 @@
 
 
 <a name="0.0.10"></a>
-## 0.0.10 (2017-09-03)
+## <small>0.0.10 (2017-09-03)</small>
 
 * 0.0.10 ([4364e28](https://github.com/wessberg/TypescriptLanguageService/commit/4364e28))
 * Bumped version ([d64a671](https://github.com/wessberg/TypescriptLanguageService/commit/d64a671))
@@ -223,7 +232,7 @@
 
 
 <a name="0.0.9"></a>
-## 0.0.9 (2017-09-02)
+## <small>0.0.9 (2017-09-02)</small>
 
 * 0.0.9 ([1cd98c5](https://github.com/wessberg/TypescriptLanguageService/commit/1cd98c5))
 * Bumped deps. ([2a826af](https://github.com/wessberg/TypescriptLanguageService/commit/2a826af))
@@ -232,7 +241,7 @@
 
 
 <a name="0.0.8"></a>
-## 0.0.8 (2017-08-28)
+## <small>0.0.8 (2017-08-28)</small>
 
 * 0.0.8 ([2eed6b7](https://github.com/wessberg/TypescriptLanguageService/commit/2eed6b7))
 * Bumped version ([bbcc786](https://github.com/wessberg/TypescriptLanguageService/commit/bbcc786))
@@ -241,7 +250,7 @@
 
 
 <a name="0.0.7"></a>
-## 0.0.7 (2017-08-28)
+## <small>0.0.7 (2017-08-28)</small>
 
 * 0.0.7 ([a5b5a1e](https://github.com/wessberg/TypescriptLanguageService/commit/a5b5a1e))
 * Added the possibility of excluding files ([3c25249](https://github.com/wessberg/TypescriptLanguageService/commit/3c25249))
@@ -250,7 +259,7 @@
 
 
 <a name="0.0.6"></a>
-## 0.0.6 (2017-08-28)
+## <small>0.0.6 (2017-08-28)</small>
 
 * 0.0.6 ([f1e697a](https://github.com/wessberg/TypescriptLanguageService/commit/f1e697a))
 * Bumped deps ([ebb5493](https://github.com/wessberg/TypescriptLanguageService/commit/ebb5493))
@@ -259,7 +268,7 @@
 
 
 <a name="0.0.5"></a>
-## 0.0.5 (2017-08-27)
+## <small>0.0.5 (2017-08-27)</small>
 
 * 0.0.5 ([0298b2b](https://github.com/wessberg/TypescriptLanguageService/commit/0298b2b))
 * Bumped version ([70b9c69](https://github.com/wessberg/TypescriptLanguageService/commit/70b9c69))
@@ -268,7 +277,7 @@
 
 
 <a name="0.0.4"></a>
-## 0.0.4 (2017-08-20)
+## <small>0.0.4 (2017-08-20)</small>
 
 * 0.0.4 ([16b7602](https://github.com/wessberg/TypescriptLanguageService/commit/16b7602))
 * Bumped version ([75a8a37](https://github.com/wessberg/TypescriptLanguageService/commit/75a8a37))
@@ -277,7 +286,7 @@
 
 
 <a name="0.0.3"></a>
-## 0.0.3 (2017-08-20)
+## <small>0.0.3 (2017-08-20)</small>
 
 * 0.0.3 ([dc12212](https://github.com/wessberg/TypescriptLanguageService/commit/dc12212))
 * Bumped dependency on Typescript ([95894de](https://github.com/wessberg/TypescriptLanguageService/commit/95894de))
@@ -286,7 +295,7 @@
 
 
 <a name="0.0.2"></a>
-## 0.0.2 (2017-08-18)
+## <small>0.0.2 (2017-08-18)</small>
 
 * 0.0.2 ([253dd9e](https://github.com/wessberg/TypescriptLanguageService/commit/253dd9e))
 * Bumped version ([d8c9d67](https://github.com/wessberg/TypescriptLanguageService/commit/d8c9d67))
@@ -295,7 +304,7 @@
 
 
 <a name="0.0.1"></a>
-## 0.0.1 (2017-08-18)
+## <small>0.0.1 (2017-08-18)</small>
 
 * 0.0.1 ([9d36c1a](https://github.com/wessberg/TypescriptLanguageService/commit/9d36c1a))
 * First commit ([365d10d](https://github.com/wessberg/TypescriptLanguageService/commit/365d10d))
