@@ -46,27 +46,27 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	 * The Set of all Regular Expressions for matching files to be excluded
 	 * @type {Set<RegExp>}
 	 */
-	private excludedFiles: Set<RegExp> = new Set();
+	private readonly excludedFiles: Set<RegExp> = new Set();
 	/**
 	 * A Map between filenames and their current version and content in the AST.
 	 * @type {Map<string, ITypescriptLanguageServiceFile>}
 	 */
-	private files: Map<string, ITypescriptLanguageServiceFile> = new Map();
+	private readonly files: Map<string, ITypescriptLanguageServiceFile> = new Map();
 	/**
 	 * The (Typescript) TypescriptLanguageService to use under-the-hood.
 	 * @type {LanguageService}
 	 */
-	private languageService: LanguageService = createLanguageService(this, createDocumentRegistry());
+	private readonly languageService: LanguageService = createLanguageService(this, createDocumentRegistry());
 	/**
 	 * The actual CompilerOptions to use
 	 * @type {CompilerOptions}
 	 */
 	private compilerOptions: CompilerOptions = TypescriptLanguageService.DEFAULT_COMPILER_OPTIONS;
 
-	constructor (private moduleUtil: IModuleUtil,
-							 private pathUtil: IPathUtil,
-							 private fileLoader: IFileLoader,
-							 private reassembler: ITypescriptPackageReassembler) {
+	constructor (private readonly moduleUtil: IModuleUtil,
+							 private readonly pathUtil: IPathUtil,
+							 private readonly fileLoader: IFileLoader,
+							 private readonly reassembler: ITypescriptPackageReassembler) {
 		this.setOptions();
 	}
 
@@ -198,13 +198,15 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 			this.files.set(normalizedPath, {version: actualVersion, content: actualContent, rawContent});
 
 			// Recursively add all missing imports to the LanguageService if 'addImportedFiles' is truthy.
-			if (addImportedFiles) this.getImportedFilesForFile(resolvedPath).forEach(importedFile => {
-				if (!this.isExcluded(importedFile.normalizedPath)) this.addFile({path: importedFile.normalizedPath, from: resolvedPath, addImportedFiles});
-			});
+			if (addImportedFiles) {
+				this.getImportedFilesForFile(resolvedPath).forEach(importedFile => {
+					if (!this.isExcluded(importedFile.normalizedPath)) this.addFile({path: importedFile.normalizedPath, from: resolvedPath, addImportedFiles});
+				});
+			}
 		}
 
 		// Retrieve the Statements of the file
-		return this.languageService.getProgram().getSourceFile(normalizedPath);
+		return this.languageService.getProgram().getSourceFile(normalizedPath)!;
 	}
 
 	/**
