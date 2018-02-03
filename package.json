@@ -1,6 +1,6 @@
 {
 	"name": "@wessberg/typescript-language-service",
-	"version": "0.0.34",
+	"version": "0.0.35",
 	"description": "A host-implementation of Typescripts LanguageService.",
 	"scripts": {
 		"changelog:generate": "conventional-changelog --outfile CHANGELOG.md --release-count 0",
