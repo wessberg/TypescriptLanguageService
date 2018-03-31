@@ -1,21 +1,15 @@
+import "../src/services";
+
 import {test} from "ava";
-import {TypescriptLanguageService} from "../src/typescript-language-service/typescript-language-service";
-import {ModuleUtil} from "@wessberg/moduleutil";
-import {FileLoader} from "@wessberg/fileloader";
-import {PathUtil} from "@wessberg/pathutil";
-import {TypescriptPackageReassembler} from "@wessberg/typescript-package-reassembler";
 import {createSourceFile, ScriptTarget} from "typescript";
+import {TypescriptLanguageService} from "../src/typescript-language-service/typescript-language-service";
 
 const file = createSourceFile("foo.ts", `export * from "foo`, ScriptTarget.ES2017);
 file.statements.forEach(statement => {
 	console.log(statement);
 });
 
-const fileLoader = new FileLoader();
-const pathUtil = new PathUtil(fileLoader);
-const moduleUtil = new ModuleUtil(fileLoader, pathUtil);
-const reassembler = new TypescriptPackageReassembler();
-const languageService = new TypescriptLanguageService(moduleUtil, pathUtil, fileLoader, reassembler);
+const languageService = new TypescriptLanguageService();
 
 test("foo", t => {
 	languageService.addFile({path: "./test/static/foo", addImportedFiles: true});

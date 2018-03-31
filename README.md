@@ -1,4 +1,4 @@
-# TypescriptLanguageService
+# TypescriptLanguageServiceHost
 [![NPM version][npm-version-image]][npm-version-url]
 [![License-mit][license-mit-image]][license-mit-url]
 
@@ -24,7 +24,7 @@ Additionally, if a file is added (either directly or automatically) that has a d
 
 ## Usage
 ```typescript
-const languageService = new TypescriptLanguageService(moduleUtil, pathUtil, fileLoader);
+const languageService = new TypescriptLanguageServiceHost();
 languageService.addFile({
 	path: "foo.ts",
 	content: `
@@ -34,8 +34,3 @@ languageService.addFile({
 	addImportedFiles: true
 });
 ```
-
-### Dependencies
-
-TypescriptLanguageService is built to fit dependency injection systems. Thus, it requires three services to be constructor-injected: implementations of [IModuleUtil](https://github.com/wessberg/moduleutil), [IFileLoader](https://github.com/wessberg/fileloader) and [IPathUtil](https://github.com/wessberg/pathutil).
-You can npm-install both of them: `npm install @wessberg/moduleutil`, `npm install @wessberg/fileloader` and `npm install @wessberg/pathutil` and either pass them on to the constructor or add them to your dependency injection system.
