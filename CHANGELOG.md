@@ -1,3 +1,12 @@
+<a name="0.0.38"></a>
+## <small>0.0.38 (2018-04-03)</small>
+
+* 0.0.38 ([a1a8326](https://github.com/wessberg/TypescriptLanguageService/commit/a1a8326))
+* Bumped deps ([f270cba](https://github.com/wessberg/TypescriptLanguageService/commit/f270cba))
+* Bumped version ([cb120eb](https://github.com/wessberg/TypescriptLanguageService/commit/cb120eb))
+
+
+
 <a name="0.0.37"></a>
 ## <small>0.0.37 (2018-03-31)</small>
 
