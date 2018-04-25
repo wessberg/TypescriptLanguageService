@@ -191,6 +191,7 @@ export class TypescriptLanguageServiceHost implements ITypescriptLanguageService
 		// Only actually update the file if it has changed.
 		if (needsUpdate) {
 
+
 			// Bump the script version
 			const actualVersion = this.getFileVersion(resolvedPath) + 1;
 
@@ -200,7 +201,14 @@ export class TypescriptLanguageServiceHost implements ITypescriptLanguageService
 			// Recursively add all missing imports to the LanguageService if 'addImportedFiles' is truthy.
 			if (addImportedFiles) {
 				this.getImportedFilesForFile(resolvedPath).forEach(importedFile => {
-					if (!this.isExcluded(importedFile.normalizedPath)) this.addFile({path: importedFile.normalizedPath, from: resolvedPath, addImportedFiles});
+					if (!this.isExcluded(importedFile.normalizedPath)) {
+						try {
+							this.addFile({path: importedFile.normalizedPath, from: resolvedPath, addImportedFiles});
+						}
+						catch {
+							// Some imported files may fail because they are 'require()'d but doesn't exist. This is OK
+						}
+					}
 				});
 			}
 		}
