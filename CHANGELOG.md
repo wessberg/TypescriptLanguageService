@@ -1,3 +1,12 @@
+<a name="0.0.41"></a>
+## <small>0.0.41 (2018-04-25)</small>
+
+* 0.0.41 ([c594945](https://github.com/wessberg/TypescriptLanguageService/commit/c594945))
+* Bumped deps and fixed a bug ([ad17116](https://github.com/wessberg/TypescriptLanguageService/commit/ad17116))
+* Bumped version ([0a14657](https://github.com/wessberg/TypescriptLanguageService/commit/0a14657))
+
+
+
 <a name="0.0.40"></a>
 ## <small>0.0.40 (2018-04-25)</small>
 
