@@ -214,7 +214,7 @@ export class TypescriptLanguageServiceHost implements ITypescriptLanguageService
 		}
 
 		// Retrieve the Statements of the file
-		return this.languageService.getProgram().getSourceFile(normalizedPath)!;
+		return this.languageService.getProgram()!.getSourceFile(normalizedPath)!;
 	}
 
 	/**
@@ -225,7 +225,7 @@ export class TypescriptLanguageServiceHost implements ITypescriptLanguageService
 	public getFile ({path, content, from}: IGetFileOptions): SourceFile {
 		// Resolve the absolute, fully qualified path
 		const pathInfo = this.getPathInfo({path, content, from: from == null ? process.cwd() : from});
-		const file = this.languageService.getProgram().getSourceFile(pathInfo.normalizedPath);
+		const file = this.languageService.getProgram()!.getSourceFile(pathInfo.normalizedPath);
 
 		// If the file is not defined, add it
 		if (file == null || pathInfo.needsUpdate) {
@@ -332,9 +332,9 @@ export class TypescriptLanguageServiceHost implements ITypescriptLanguageService
 	 * Gets the DefinitionInfo at the provided position in the given file
 	 * @param {string} filename
 	 * @param {number} position
-	 * @returns {DefinitionInfo[]}
+	 * @returns {DefinitionInfo[]?}
 	 */
-	public getDefinitionAtPosition (filename: string, position: number): DefinitionInfo[] {
+	public getDefinitionAtPosition (filename: string, position: number): DefinitionInfo[]|undefined {
 		const {normalizedPath} = this.getAddPath(filename);
 		return this.languageService.getDefinitionAtPosition(normalizedPath, position);
 	}
@@ -342,9 +342,9 @@ export class TypescriptLanguageServiceHost implements ITypescriptLanguageService
 	/**
 	 * Gets the DefinitionInfo for the provided Statement
 	 * @param {Node} statement
-	 * @returns {DefinitionInfo[]}
+	 * @returns {DefinitionInfo[]?}
 	 */
-	public getDefinitionAtStatement (statement: Node): DefinitionInfo[] {
+	public getDefinitionAtStatement (statement: Node): DefinitionInfo[]|undefined {
 		const filePath = statement.getSourceFile().fileName;
 		const position = statement.pos;
 		return this.languageService.getDefinitionAtPosition(filePath, position);
@@ -354,9 +354,9 @@ export class TypescriptLanguageServiceHost implements ITypescriptLanguageService
 	 * Gets the Type DefinitionInfo at the provided position in the given file
 	 * @param {string} filename
 	 * @param {number} position
-	 * @returns {DefinitionInfo[]}
+	 * @returns {DefinitionInfo[]?}
 	 */
-	public getTypeDefinitionAtPosition (filename: string, position: number): DefinitionInfo[] {
+	public getTypeDefinitionAtPosition (filename: string, position: number): DefinitionInfo[]|undefined {
 		const {normalizedPath} = this.getAddPath(filename);
 		return this.languageService.getTypeDefinitionAtPosition(normalizedPath, position);
 	}
@@ -364,9 +364,9 @@ export class TypescriptLanguageServiceHost implements ITypescriptLanguageService
 	/**
 	 * Gets the Type DefinitionInfo at the position of the provided Statement.
 	 * @param {Node} statement
-	 * @returns {DefinitionInfo[]}
+	 * @returns {DefinitionInfo[]?}
 	 */
-	public getTypeDefinitionAtStatement (statement: Node): DefinitionInfo[] {
+	public getTypeDefinitionAtStatement (statement: Node): DefinitionInfo[]|undefined {
 		const filePath = statement.getSourceFile().fileName;
 		const position = statement.pos;
 		return this.languageService.getTypeDefinitionAtPosition(filePath, position);
@@ -376,9 +376,9 @@ export class TypescriptLanguageServiceHost implements ITypescriptLanguageService
 	 * Finds all references for the identifier on the provided position in the provided file
 	 * @param {string} filename
 	 * @param {number} position
-	 * @returns {ReferencedSymbol[]}
+	 * @returns {ReferencedSymbol[]?}
 	 */
-	public findReferencesForPosition (filename: string, position: number): ReferencedSymbol[] {
+	public findReferencesForPosition (filename: string, position: number): ReferencedSymbol[]|undefined {
 		const {normalizedPath} = this.getAddPath(filename);
 		return this.languageService.findReferences(normalizedPath, position);
 	}
@@ -386,9 +386,9 @@ export class TypescriptLanguageServiceHost implements ITypescriptLanguageService
 	/**
 	 * Finds all references for the identifier associated with the provided Statement.
 	 * @param {Node} statement
-	 * @returns {ReferencedSymbol[]}
+	 * @returns {ReferencedSymbol[]?}
 	 */
-	public findReferencesForStatement (statement: Node): ReferencedSymbol[] {
+	public findReferencesForStatement (statement: Node): ReferencedSymbol[]|undefined {
 		const filePath = statement.getSourceFile().fileName;
 		const position = statement.pos;
 		return this.languageService.findReferences(filePath, position);
@@ -398,9 +398,9 @@ export class TypescriptLanguageServiceHost implements ITypescriptLanguageService
 	 * Gets QuickInfo for the provided file on the provided position
 	 * @param {string} filename
 	 * @param {number} position
-	 * @returns {QuickInfo}
+	 * @returns {QuickInfo?}
 	 */
-	public getQuickInfoAtPosition (filename: string, position: number): QuickInfo {
+	public getQuickInfoAtPosition (filename: string, position: number): QuickInfo|undefined {
 		const {normalizedPath} = this.getAddPath(filename);
 		return this.languageService.getQuickInfoAtPosition(normalizedPath, position);
 	}
@@ -408,9 +408,9 @@ export class TypescriptLanguageServiceHost implements ITypescriptLanguageService
 	/**
 	 * Gets QuickInfo for the provided statement
 	 * @param {Node} statement
-	 * @returns {ImplementationLocation[]}
+	 * @returns {QuickInfo?}
 	 */
-	public getQuickInfoForStatement (statement: Node): QuickInfo {
+	public getQuickInfoForStatement (statement: Node): QuickInfo|undefined {
 		const filePath = statement.getSourceFile().fileName;
 		const position = statement.pos;
 		return this.languageService.getQuickInfoAtPosition(filePath, position);
@@ -420,9 +420,9 @@ export class TypescriptLanguageServiceHost implements ITypescriptLanguageService
 	 * Gets the implementation for the interface located on the given position in the given file
 	 * @param {string} filename
 	 * @param {number} position
-	 * @returns {ImplementationLocation[]}
+	 * @returns {ImplementationLocation[]?}
 	 */
-	public getImplementationAtPosition (filename: string, position: number): ImplementationLocation[] {
+	public getImplementationAtPosition (filename: string, position: number): ImplementationLocation[]|undefined {
 		const {normalizedPath} = this.getAddPath(filename);
 		return this.languageService.getImplementationAtPosition(normalizedPath, position);
 	}
@@ -430,9 +430,9 @@ export class TypescriptLanguageServiceHost implements ITypescriptLanguageService
 	/**
 	 * Gets the implementation for the interface associated with the given Statement,
 	 * @param {Node} statement
-	 * @returns {ImplementationLocation[]}
+	 * @returns {ImplementationLocation[]?}
 	 */
-	public getImplementationForStatement (statement: Node): ImplementationLocation[] {
+	public getImplementationForStatement (statement: Node): ImplementationLocation[]|undefined {
 		const filePath = statement.getSourceFile().fileName;
 		const position = statement.pos;
 		return this.languageService.getImplementationAtPosition(filePath, position);

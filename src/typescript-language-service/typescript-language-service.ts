@@ -43,18 +43,18 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	 * This is a noop. The constructor returns the proper implementation of TypescriptLanguageService
 	 * @param {string} _filename
 	 * @param {number} _position
-	 * @returns {ReferencedSymbol[]}
+	 * @returns {ReferencedSymbol[]?}
 	 */
-	public findReferencesForPosition (_filename: string, _position: number): ReferencedSymbol[] {
+	public findReferencesForPosition (_filename: string, _position: number): ReferencedSymbol[]|undefined {
 		throw new Error();
 	}
 
 	/**
 	 * This is a noop. The constructor returns the proper implementation of TypescriptLanguageService
 	 * @param {ts.Node} _statement
-	 * @returns {ReferencedSymbol[]}
+	 * @returns {ReferencedSymbol[]?}
 	 */
-	public findReferencesForStatement (_statement: Node): ReferencedSymbol[] {
+	public findReferencesForStatement (_statement: Node): ReferencedSymbol[]|undefined {
 		throw new Error();
 	}
 
@@ -97,18 +97,18 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	 * This is a noop. The constructor returns the proper implementation of TypescriptLanguageService
 	 * @param {string} _filename
 	 * @param {number} _position
-	 * @returns {DefinitionInfo[]}
+	 * @returns {DefinitionInfo[]?}
 	 */
-	public getDefinitionAtPosition (_filename: string, _position: number): DefinitionInfo[] {
+	public getDefinitionAtPosition (_filename: string, _position: number): DefinitionInfo[]|undefined {
 		throw new Error();
 	}
 
 	/**
 	 * This is a noop. The constructor returns the proper implementation of TypescriptLanguageService
 	 * @param {Node} _statement
-	 * @returns {DefinitionInfo[]}
+	 * @returns {DefinitionInfo[]?}
 	 */
-	public getDefinitionAtStatement (_statement: Node): DefinitionInfo[] {
+	public getDefinitionAtStatement (_statement: Node): DefinitionInfo[]|undefined {
 		throw new Error();
 	}
 
@@ -144,18 +144,18 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	 * This is a noop. The constructor returns the proper implementation of TypescriptLanguageService
 	 * @param {string} _filename
 	 * @param {number} _position
-	 * @returns {ImplementationLocation[]}
+	 * @returns {ImplementationLocation[]?}
 	 */
-	public getImplementationAtPosition (_filename: string, _position: number): ImplementationLocation[] {
+	public getImplementationAtPosition (_filename: string, _position: number): ImplementationLocation[]|undefined {
 		throw new Error();
 	}
 
 	/**
 	 * This is a noop. The constructor returns the proper implementation of TypescriptLanguageService
 	 * @param {Node} _statement
-	 * @returns {ImplementationLocation[]}
+	 * @returns {ImplementationLocation[]?}
 	 */
-	public getImplementationForStatement (_statement: Node): ImplementationLocation[] {
+	public getImplementationForStatement (_statement: Node): ImplementationLocation[]|undefined {
 		throw new Error();
 	}
 
@@ -200,18 +200,18 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	 * This is a noop. The constructor returns the proper implementation of TypescriptLanguageService
 	 * @param {string} _filename
 	 * @param {number} _position
-	 * @returns {QuickInfo}
+	 * @returns {QuickInfo?}
 	 */
-	public getQuickInfoAtPosition (_filename: string, _position: number): QuickInfo {
+	public getQuickInfoAtPosition (_filename: string, _position: number): QuickInfo|undefined {
 		throw new Error();
 	}
 
 	/**
 	 * This is a noop. The constructor returns the proper implementation of TypescriptLanguageService
 	 * @param {Node} _statement
-	 * @returns {QuickInfo}
+	 * @returns {QuickInfo?}
 	 */
-	public getQuickInfoForStatement (_statement: Node): QuickInfo {
+	public getQuickInfoForStatement (_statement: Node): QuickInfo|undefined {
 		throw new Error();
 	}
 
@@ -245,18 +245,18 @@ export class TypescriptLanguageService implements ITypescriptLanguageService {
 	 * This is a noop. The constructor returns the proper implementation of TypescriptLanguageService
 	 * @param {string} _filename
 	 * @param {number} _position
-	 * @returns {DefinitionInfo[]}
+	 * @returns {DefinitionInfo[]?}
 	 */
-	public getTypeDefinitionAtPosition (_filename: string, _position: number): DefinitionInfo[] {
+	public getTypeDefinitionAtPosition (_filename: string, _position: number): DefinitionInfo[]|undefined {
 		throw new Error();
 	}
 
 	/**
 	 * This is a noop. The constructor returns the proper implementation of TypescriptLanguageService
 	 * @param {Node} _statement
-	 * @returns {DefinitionInfo[]}
+	 * @returns {DefinitionInfo[]?}
 	 */
-	public getTypeDefinitionAtStatement (_statement: Node): DefinitionInfo[] {
+	public getTypeDefinitionAtStatement (_statement: Node): DefinitionInfo[]|undefined {
 		throw new Error();
 	}
 
