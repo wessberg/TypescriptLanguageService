@@ -1,3 +1,11 @@
+## <small>0.0.45 (2018-07-30)</small>
+
+* 0.0.45 ([6d912ac](https://github.com/wessberg/TypescriptLanguageService/commit/6d912ac))
+* Bumped to Typescript v3.01 support ([4b8fde1](https://github.com/wessberg/TypescriptLanguageService/commit/4b8fde1))
+* Bumped version ([f965340](https://github.com/wessberg/TypescriptLanguageService/commit/f965340))
+
+
+
 ## <small>0.0.44 (2018-06-21)</small>
 
 * 0.0.44 ([ca9aabc](https://github.com/wessberg/TypescriptLanguageService/commit/ca9aabc))
