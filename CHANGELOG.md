@@ -1,3 +1,11 @@
+## <small>0.0.46 (2018-07-31)</small>
+
+* 0.0.46 ([b5845ea](https://github.com/wessberg/TypescriptLanguageService/commit/b5845ea))
+* Bumped deps ([4ec79c5](https://github.com/wessberg/TypescriptLanguageService/commit/4ec79c5))
+* Bumped version ([a552ef3](https://github.com/wessberg/TypescriptLanguageService/commit/a552ef3))
+
+
+
 ## <small>0.0.45 (2018-07-30)</small>
 
 * 0.0.45 ([6d912ac](https://github.com/wessberg/TypescriptLanguageService/commit/6d912ac))
