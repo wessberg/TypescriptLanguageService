@@ -1,6 +1,6 @@
 {
 	"name": "@wessberg/typescript-language-service",
-	"version": "0.0.47",
+	"version": "0.0.48",
 	"description": "A host-implementation of Typescripts LanguageService.",
 	"scripts": {
 		"clean:dist": "rm -r -f dist",
