@@ -121,16 +121,13 @@ export class TypescriptLanguageServiceHost implements ITypescriptLanguageService
 		// Check if the file needs an update
 		const needsUpdate = this.needsUpdate(normalizedPath, actualContent);
 
-		if (needsUpdate) {
-			// Check if it was actually .js file before normalizing the extension (in which case we want to merge declarations in)
-			if (resolvedPath.endsWith(".js")) {
-
-				// Check for a matching declaration file
-				const declarationPath = this.fileLoader.getWithFirstMatchedExtensionSync(this.pathUtil.clearExtension(resolvedPath), [".d.ts"]);
-				if (declarationPath != null) {
-					// Merge/Reassemble the declarations with the .js file
-					actualContent = this.reassemble(normalizedPath, actualContent, declarationPath);
-				}
+		// Check if it was actually .js file before normalizing the extension (in which case we want to merge declarations in)
+		if (needsUpdate && resolvedPath.endsWith(".js")) {
+			// Check for a matching declaration file
+			const declarationPath = this.fileLoader.getWithFirstMatchedExtensionSync(this.pathUtil.clearExtension(resolvedPath), [".d.ts"]);
+			if (declarationPath != null) {
+				// Merge/Reassemble the declarations with the .js file
+				actualContent = this.reassemble(normalizedPath, actualContent, declarationPath);
 			}
 		}
 
